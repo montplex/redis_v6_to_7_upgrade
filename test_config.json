@@ -1,0 +1,159 @@
+{
+  "mode": "simulate",
+  "generated_at": "2026-03-05T23:31:09.622686",
+  "redis_binary": "redis-server",
+  "shards": [
+    {
+      "shard_index": 0,
+      "master": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "current_version": "6.2.x",
+        "new_version": "7.2.x"
+      },
+      "slaves": [
+        {
+          "host": "127.0.0.1",
+          "port": 6382,
+          "region": "A"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6383,
+          "region": "B"
+        }
+      ],
+      "new_slaves": [
+        {
+          "host": "",
+          "port": 6479,
+          "region": "A",
+          "version": "7.2.x"
+        },
+        {
+          "host": "",
+          "port": 6480,
+          "region": "B",
+          "version": "7.2.x"
+        }
+      ]
+    },
+    {
+      "shard_index": 1,
+      "master": {
+        "host": "127.0.0.1",
+        "port": 6380,
+        "current_version": "6.2.x",
+        "new_version": "7.2.x"
+      },
+      "slaves": [
+        {
+          "host": "127.0.0.1",
+          "port": 6384,
+          "region": "A"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6385,
+          "region": "B"
+        }
+      ],
+      "new_slaves": [
+        {
+          "host": "",
+          "port": 6481,
+          "region": "A",
+          "version": "7.2.x"
+        },
+        {
+          "host": "",
+          "port": 6482,
+          "region": "B",
+          "version": "7.2.x"
+        }
+      ]
+    },
+    {
+      "shard_index": 2,
+      "master": {
+        "host": "127.0.0.1",
+        "port": 6381,
+        "current_version": "6.2.x",
+        "new_version": "7.2.x"
+      },
+      "slaves": [
+        {
+          "host": "127.0.0.1",
+          "port": 6386,
+          "region": "A"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6387,
+          "region": "B"
+        }
+      ],
+      "new_slaves": [
+        {
+          "host": "",
+          "port": 6483,
+          "region": "A",
+          "version": "7.2.x"
+        },
+        {
+          "host": "",
+          "port": 6484,
+          "region": "B",
+          "version": "7.2.x"
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "host": "127.0.0.1",
+      "port": 6379,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6380,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6381,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6382,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6383,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6384,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6385,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6386,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6387,
+      "password": ""
+    }
+  ]
+}

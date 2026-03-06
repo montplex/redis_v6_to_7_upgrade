@@ -1,0 +1,82 @@
+{
+  "cluster_name": "redis-cluster",
+  "description": "Example cluster configuration for upgrade",
+  
+  "master_password": "your_master_password_here",
+  "slave_password": "your_slave_password_here",
+  
+  "nodes": [
+    {"host": "192.168.1.1", "port": 6379, "password": ""},
+    {"host": "192.168.1.2", "port": 6379, "password": ""},
+    {"host": "192.168.1.3", "port": 6379, "password": ""},
+    {"host": "192.168.1.4", "port": 6379, "password": ""},
+    {"host": "192.168.1.5", "port": 6379, "password": ""},
+    {"host": "192.168.1.6", "port": 6379, "password": ""},
+    {"host": "192.168.2.1", "port": 6379, "password": ""},
+    {"host": "192.168.2.2", "port": 6379, "password": ""},
+    {"host": "192.168.2.3", "port": 6379, "password": ""}
+  ],
+  
+  "shards": [
+    {
+      "shard_index": 0,
+      "master": {
+        "host": "192.168.1.1",
+        "port": 6379,
+        "current_version": "6.2.x",
+        "new_version": "7.2.x"
+      },
+      "slaves": [
+        {"host": "192.168.1.4", "port": 6379, "current_version": "6.2.x"},
+        {"host": "192.168.2.1", "port": 6379, "current_version": "6.2.x", "region": "B"}
+      ],
+      "new_slaves": [
+        {"host": "192.168.1.7", "port": 6379, "region": "A", "version": "7.2.x", "password": ""},
+        {"host": "192.168.1.8", "port": 6379, "region": "A", "version": "7.2.x", "password": ""},
+        {"host": "192.168.2.4", "port": 6379, "region": "B", "version": "7.2.x", "password": ""}
+      ]
+    },
+    {
+      "shard_index": 1,
+      "master": {
+        "host": "192.168.1.2",
+        "port": 6379,
+        "current_version": "6.2.x",
+        "new_version": "7.2.x"
+      },
+      "slaves": [
+        {"host": "192.168.1.5", "port": 6379, "current_version": "6.2.x"},
+        {"host": "192.168.2.2", "port": 6379, "current_version": "6.2.x", "region": "B"}
+      ],
+      "new_slaves": [
+        {"host": "192.168.1.9", "port": 6379, "region": "A", "version": "7.2.x", "password": ""},
+        {"host": "192.168.1.10", "port": 6379, "region": "A", "version": "7.2.x", "password": ""},
+        {"host": "192.168.2.5", "port": 6379, "region": "B", "version": "7.2.x", "password": ""}
+      ]
+    },
+    {
+      "shard_index": 2,
+      "master": {
+        "host": "192.168.1.3",
+        "port": 6379,
+        "current_version": "6.2.x",
+        "new_version": "7.2.x"
+      },
+      "slaves": [
+        {"host": "192.168.1.6", "port": 6379, "current_version": "6.2.x"},
+        {"host": "192.168.2.3", "port": 6379, "current_version": "6.2.x", "region": "B"}
+      ],
+      "new_slaves": [
+        {"host": "192.168.1.11", "port": 6379, "region": "A", "version": "7.2.x", "password": ""},
+        {"host": "192.168.1.12", "port": 6379, "region": "A", "version": "7.2.x", "password": ""},
+        {"host": "192.168.2.6", "port": 6379, "region": "B", "version": "7.2.x", "password": ""}
+      ]
+    }
+  ],
+  
+  "upgrade_options": {
+    "observation_period_hours": 48,
+    "replication_timeout": 120,
+    "failover_replica_index": 1
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "mode": "simulate",
+  "generated_at": "2026-03-06T18:18:35.879201",
+  "redis_binary": "bin/redis-server-v6",
+  "shards": [
+    {
+      "shard_index": 0,
+      "master": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "current_version": "6.2.x",
+        "new_version": "7.2.x"
+      },
+      "slaves": [
+        {
+          "host": "127.0.0.1",
+          "port": 6386,
+          "region": "A"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6384,
+          "region": "B"
+        }
+      ],
+      "new_slaves": [
+        {
+          "host": "127.0.0.1",
+          "port": 6479,
+          "region": "A",
+          "version": "7.2.x"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6480,
+          "region": "B",
+          "version": "7.2.x"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6481,
+          "region": "C",
+          "version": "7.2.x"
+        }
+      ]
+    },
+    {
+      "shard_index": 1,
+      "master": {
+        "host": "127.0.0.1",
+        "port": 6380,
+        "current_version": "6.2.x",
+        "new_version": "7.2.x"
+      },
+      "slaves": [
+        {
+          "host": "127.0.0.1",
+          "port": 6382,
+          "region": "A"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6387,
+          "region": "B"
+        }
+      ],
+      "new_slaves": [
+        {
+          "host": "127.0.0.1",
+          "port": 6482,
+          "region": "A",
+          "version": "7.2.x"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6483,
+          "region": "B",
+          "version": "7.2.x"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6484,
+          "region": "C",
+          "version": "7.2.x"
+        }
+      ]
+    },
+    {
+      "shard_index": 2,
+      "master": {
+        "host": "127.0.0.1",
+        "port": 6381,
+        "current_version": "6.2.x",
+        "new_version": "7.2.x"
+      },
+      "slaves": [
+        {
+          "host": "127.0.0.1",
+          "port": 6383,
+          "region": "A"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6385,
+          "region": "B"
+        }
+      ],
+      "new_slaves": [
+        {
+          "host": "127.0.0.1",
+          "port": 6485,
+          "region": "A",
+          "version": "7.2.x"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6486,
+          "region": "B",
+          "version": "7.2.x"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6487,
+          "region": "C",
+          "version": "7.2.x"
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "host": "127.0.0.1",
+      "port": 6379,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6380,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6381,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6382,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6383,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6384,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6385,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6386,
+      "password": ""
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 6387,
+      "password": ""
+    }
+  ]
+}
