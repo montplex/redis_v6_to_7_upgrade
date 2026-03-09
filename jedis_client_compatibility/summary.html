@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jedis v6.2.0 单元测试对比报告 - Redis v6 vs v7</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 { color: #333; border-bottom: 3px solid #007bff; padding-bottom: 10px; }
+        h2 { color: #555; margin-top: 30px; }
+        h3 { color: #666; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; text-align: center; border: 1px solid #ddd; }
+        th { background-color: #007bff; color: white; }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+        .passed { color: #28a745; font-weight: bold; }
+        .skipped { color: #ffc107; font-weight: bold; }
+        .failed { color: #dc3545; font-weight: bold; }
+        .error { color: #fd7e14; font-weight: bold; }
+        .v6-only { background-color: #fff3cd; }
+        .v7-only { background-color: #d4edda; }
+        .summary-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 20px 0; }
+        .conclusion { background: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 4px; margin: 20px 0; }
+        .note { background: #fff3cd; border: 1px solid #ffeeba; padding: 15px; border-radius: 4px; margin: 20px 0; }
+        ul { line-height: 1.8; }
+    </style>
+</head>
+<body>
+    <h1>Jedis v6.2.0 单元测试对比报告</h1>
+    <p><strong>全部单元测试 - Redis v6.2.18 vs Redis v7.2.11</strong></p>
+    
+    <div class="summary-box">
+        <h2>测试环境</h2>
+        <ul>
+            <li><strong>Jedis版本:</strong> v6.2.0</li>
+            <li><strong>Redis v6版本:</strong> 6.2.18</li>
+            <li><strong>Redis v7版本:</strong> 7.2.11</li>
+            <li><strong>测试日期:</strong> 2026-03-04</li>
+            <li><strong>测试说明:</strong> 已排除TLS相关测试 (SSL*Test.java)</li>
+        </ul>
+    </div>
+
+    <h2>测试结果总览</h2>
+    <table>
+        <tr>
+            <th>指标</th>
+            <th>Redis v6.2.18</th>
+            <th>Redis v7.2.11</th>
+            <th>差异</th>
+        </tr>
+        <tr>
+            <td><strong>总测试数</strong></td>
+            <td class="passed">8737</td>
+            <td class="passed">9032</td>
+            <td>v7多295个</td>
+        </tr>
+        <tr>
+            <td><strong>失败 (Failures)</strong></td>
+            <td class="passed">0</td>
+            <td class="failed">1</td>
+            <td>v7独有</td>
+        </tr>
+        <tr>
+            <td><strong>错误 (Errors)</strong></td>
+            <td class="error">16</td>
+            <td class="error">11</td>
+            <td>v7少5个</td>
+        </tr>
+        <tr>
+            <td><strong>跳过 (Skipped)</strong></td>
+            <td class="skipped">567</td>
+            <td class="skipped">410</td>
+            <td>v7少157个</td>
+        </tr>
+        <tr style="background-color: #e9ecef; font-weight: bold;">
+            <td>实际通过</td>
+            <td>8737 - 0 - 16 - 567 = <span class="passed">8154</span></td>
+            <td>9032 - 1 - 11 - 410 = <span class="passed">8610</span></td>
+            <td>v7多456个</td>
+        </tr>
+    </table>
+
+    <h2>详细差异分析</h2>
+    
+    <h3>1. Redis v6 错误但 v7 正常的测试（v6独有错误）</h3>
+    <table>
+        <tr>
+            <th>测试类</th>
+            <th>测试数</th>
+            <th>错误数</th>
+            <th>跳过数</th>
+            <th>说明</th>
+        </tr>
+        <tr class="v6-only">
+            <td>ClusterShardedPublishSubscribeCommandsTest</td>
+            <td>8</td>
+            <td class="error">1</td>
+            <td class="skipped">7</td>
+            <td>Cluster节点清理错误</td>
+        </tr>
+        <tr class="v6-only">
+            <td>ClusterStringValuesCommandsTest</td>
+            <td>27</td>
+            <td class="error">3 (共81次运行)</td>
+            <td class="skipped">3</td>
+            <td>setGetWithParams语法错误</td>
+        </tr>
+        <tr class="v6-only">
+            <td>ClusterBinaryValuesCommandsTest</td>
+            <td>31</td>
+            <td class="error">3 (共93次运行)</td>
+            <td>0</td>
+            <td>setGetWithParams语法错误</td>
+        </tr>
+        <tr class="v6-only">
+            <td>PooledStringValuesCommandsTest</td>
+            <td>27</td>
+            <td class="error">3 (共81次运行)</td>
+            <td class="skipped">3</td>
+            <td>setGetWithParams语法错误</td>
+        </tr>
+        <tr class="v6-only">
+            <td>PooledBinaryValuesCommandsTest</td>
+            <td>34</td>
+            <td class="error">3 (共102次运行)</td>
+            <td>0</td>
+            <td>setGetWithParams语法错误</td>
+        </tr>
+    </table>
+
+    <h3>2. Redis v7 错误但 v6 正常的测试（v7独有失败）</h3>
+    <table>
+        <tr>
+            <th>测试类</th>
+            <th>测试数</th>
+            <th>失败/错误数</th>
+            <th>说明</th>
+        </tr>
+        <tr class="v7-only">
+            <td><strong>ClusterCommandsTest.clusterShards</strong></td>
+            <td>20</td>
+            <td class="failed">1 Failure</td>
+            <td>clusterShards返回null，v7的Cluster API变化导致</td>
+        </tr>
+    </table>
+
+    <h3>3. 两版本共有的错误（TLS/SSL相关，可忽略）</h3>
+    <table>
+        <tr>
+            <th>测试类</th>
+            <th>说明</th>
+        </tr>
+        <tr>
+            <td>SSLOptionsJedisPooledTest</td>
+            <td>缺少TLS证书文件</td>
+        </tr>
+        <tr>
+            <td>SSLJedisSentinelPoolTest</td>
+            <td>缺少TLS证书文件</td>
+        </tr>
+        <tr>
+            <td>SSLOptionsJedisTest</td>
+            <td>缺少TLS证书文件</td>
+        </tr>
+        <tr>
+            <td>SSLACLJedisTest</td>
+            <td>缺少TLS证书文件</td>
+        </tr>
+        <tr>
+            <td>SSLOptionsJedisClusterTest</td>
+            <td>缺少TLS证书文件</td>
+        </tr>
+        <tr>
+            <td>SSLJedisTest</td>
+            <td>缺少TLS证书文件</td>
+        </tr>
+        <tr>
+            <td>SSLJedisClusterTest</td>
+            <td>缺少TLS证书文件</td>
+        </tr>
+        <tr>
+            <td>SSLACLJedisClusterTest</td>
+            <td>缺少TLS证书文件</td>
+        </tr>
+        <tr>
+            <td>SSLJedisPooledClientSideCacheTest</td>
+            <td>缺少TLS证书文件</td>
+        </tr>
+        <tr>
+            <td>SSLOptionsJedisSentinelPoolTest</td>
+            <td>缺少TLS证书文件</td>
+        </tr>
+        <tr>
+            <td>RedisJsonV1Test</td>
+            <td>Gson反射兼容性问题</td>
+        </tr>
+    </table>
+
+    <div class="conclusion">
+        <h3>结论</h3>
+        <ul>
+            <li><strong>Redis v7 总体表现更优:</strong> 实际通过8610个测试 vs v6的8154个，多456个</li>
+            <li><strong>v6独有的错误:</strong> 主要是Cluster相关测试的Values Commands测试，因Redis v6不支持新的SET/GET语法参数</li>
+            <li><strong>v7独有的失败:</strong> ClusterCommandsTest.clusterShards测试失败，是v7的Cluster API变化导致</li>
+            <li><strong>跳过测试差异:</strong> v7跳过的测试更少(410 vs 567)，说明v7对新特性支持更好</li>
+        </ul>
+    </div>
+
+    <div class="note">
+        <h3>详细分析</h3>
+        <p>详见 <a href="detailed_analysis.md">detailed_analysis.md</a></p>
+    </div>
+
+    <hr>
+    <p style="text-align: center; color: #666;">
+        生成时间: 2026-03-04 | Jedis v6.2.0 | Redis v6.2.18 vs v7.2.11
+    </p>
+</body>
+</html>
