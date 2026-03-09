@@ -15,6 +15,10 @@
 ├── test_config.json       # 测试配置
 ```
 
+## 客户端兼容性测试
+
+详见 [jedis_client_compatibility/summary.md](jedis_client_compatibility/summary.md)
+
 ## 文档说明
 
 | 文件 | 说明 |
@@ -23,6 +27,7 @@
 | **scripts/guide.md** | 逐步升级指南，提供每个升级步骤的命令示例和验证要点 |
 | **scripts/*.py** | 各步骤的 Python 自动化脚本 |
 | **test_config.json** | 测试环境配置文件 |
+| **jedis_client_compatibility/summary.md** | Jedis 客户端兼容性测试报告 |
 
 ## 快速开始
 
