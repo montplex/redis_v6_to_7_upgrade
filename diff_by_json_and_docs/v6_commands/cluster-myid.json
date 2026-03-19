@@ -1,0 +1,19 @@
+{
+    "CLUSTER|MYID": {
+        "summary": "Returns the ID of a node.",
+        "complexity": "O(1)",
+        "group": "cluster",
+        "since": "3.0.0",
+        "arity": 2,
+        "command_flags": [
+            "STALE"
+        ],
+        "acl_categories": [
+            "SLOW"
+        ],
+        "reply_schema": {
+            "description": "the node id",
+            "type": "string"
+        }
+    }
+}

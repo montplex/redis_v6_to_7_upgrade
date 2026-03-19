@@ -1,0 +1,55 @@
+{
+    "UNLINK": {
+        "summary": "Asynchronously deletes one or more keys.",
+        "complexity": "O(1) for each key removed regardless of its size. Then the command does O(N) work in a different thread in order to reclaim memory, where N is the number of allocations the deleted objects where composed of.",
+        "group": "generic",
+        "since": "4.0.0",
+        "arity": -2,
+        "command_flags": [
+            "FAST",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "FAST",
+            "KEYSPACE",
+            "WRITE"
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": -1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0,
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "description": "the number of keys that were unlinked",
+            "type": "integer",
+            "minimum": 0
+        },
+        "command_tips": [
+            "REQUEST_POLICY:MULTI_SHARD",
+            "RESPONSE_POLICY:AGG_SUM"
+        ]
+    }
+}

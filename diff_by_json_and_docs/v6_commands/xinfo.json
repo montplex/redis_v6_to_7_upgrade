@@ -1,0 +1,38 @@
+{
+    "XINFO": {
+        "summary": "A container for stream introspection commands.",
+        "complexity": "Depends on subcommand.",
+        "group": "stream",
+        "since": "5.0.0",
+        "arity": -2,
+        "command_flags": [
+            "RANDOM",
+            "READONLY"
+        ],
+        "acl_categories": [
+            "READ",
+            "SLOW",
+            "STREAM"
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RO",
+                    "ACCESS"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 2
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ]
+    }
+}

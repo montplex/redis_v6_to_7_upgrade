@@ -1,0 +1,52 @@
+{
+    "PFDEBUG": {
+        "summary": "Internal commands for debugging HyperLogLog values.",
+        "complexity": "N/A",
+        "group": "hyperloglog",
+        "since": "2.8.9",
+        "arity": -3,
+        "command_flags": [
+            "ADMIN",
+            "DENYOOM",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "HYPERLOGLOG",
+            "SLOW",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "subcommand",
+                "type": "string"
+            },
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            }
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 2
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ]
+    }
+}

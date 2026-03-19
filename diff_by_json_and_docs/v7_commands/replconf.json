@@ -1,0 +1,27 @@
+{
+    "REPLCONF": {
+        "summary": "An internal command for configuring the replication stream.",
+        "complexity": "O(1)",
+        "group": "server",
+        "since": "3.0.0",
+        "arity": -1,
+        "command_flags": [
+            "ADMIN",
+            "ALLOW_BUSY",
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "reply_schema": {
+            "const": "OK"
+        },
+        "doc_flags": [
+            "SYSCMD"
+        ]
+    }
+}

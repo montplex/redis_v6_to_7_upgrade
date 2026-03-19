@@ -1,0 +1,74 @@
+{
+    "COPY": {
+        "summary": "Copies the value of a key to a new key.",
+        "complexity": "O(N) worst case for collections, where N is the number of nested items. O(1) for string values.",
+        "group": "generic",
+        "since": "6.2.0",
+        "arity": -3,
+        "command_flags": [
+            "DENYOOM",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "KEYSPACE",
+            "SLOW",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "source",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "destination",
+                "type": "key",
+                "key_spec_index": 1
+            },
+            {
+                "name": "destination-db",
+                "type": "integer",
+                "token": "DB",
+                "optional": true
+            },
+            {
+                "name": "replace",
+                "type": "pure-token",
+                "token": "REPLACE",
+                "optional": true
+            }
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "source was copied",
+                    "const": 1
+                },
+                {
+                    "description": "source was not copied",
+                    "const": 0
+                }
+            ]
+        }
+    }
+}

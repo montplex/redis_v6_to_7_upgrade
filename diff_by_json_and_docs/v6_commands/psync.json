@@ -1,0 +1,28 @@
+{
+    "PSYNC": {
+        "summary": "An internal command used in replication.",
+        "complexity": "",
+        "group": "server",
+        "since": "2.8.0",
+        "arity": -3,
+        "command_flags": [
+            "ADMIN",
+            "NOSCRIPT"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "replicationid",
+                "type": "string"
+            },
+            {
+                "name": "offset",
+                "type": "integer"
+            }
+        ]
+    }
+}

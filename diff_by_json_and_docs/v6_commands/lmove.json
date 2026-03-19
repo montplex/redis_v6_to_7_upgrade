@@ -1,0 +1,86 @@
+{
+    "LMOVE": {
+        "summary": "Returns an element after popping it from one list and pushing it to another. Deletes the list if the last element was moved.",
+        "complexity": "O(1)",
+        "group": "list",
+        "since": "6.2.0",
+        "arity": 5,
+        "command_flags": [
+            "DENYOOM",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "LIST",
+            "SLOW",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "source",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "destination",
+                "type": "key",
+                "key_spec_index": 1
+            },
+            {
+                "name": "wherefrom",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "left",
+                        "type": "pure-token",
+                        "token": "LEFT"
+                    },
+                    {
+                        "name": "right",
+                        "type": "pure-token",
+                        "token": "RIGHT"
+                    }
+                ]
+            },
+            {
+                "name": "whereto",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "left",
+                        "type": "pure-token",
+                        "token": "LEFT"
+                    },
+                    {
+                        "name": "right",
+                        "type": "pure-token",
+                        "token": "RIGHT"
+                    }
+                ]
+            }
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "description": "The element being popped and pushed.",
+            "type": "string"
+        }
+    }
+}

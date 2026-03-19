@@ -1,0 +1,39 @@
+{
+    "FUNCTION|LOAD": {
+        "summary": "Creates a library.",
+        "complexity": "O(1) (considering compilation time is redundant)",
+        "group": "scripting",
+        "since": "7.0.0",
+        "arity": -3,
+        "command_flags": [
+            "DENYOOM",
+            "NOSCRIPT",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "SCRIPTING",
+            "SLOW",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "replace",
+                "type": "pure-token",
+                "token": "REPLACE",
+                "optional": true
+            },
+            {
+                "name": "function-code",
+                "type": "string"
+            }
+        ],
+        "reply_schema": {
+            "description": "The library name that was loaded",
+            "type": "string"
+        },
+        "command_tips": [
+            "REQUEST_POLICY:ALL_SHARDS",
+            "RESPONSE_POLICY:ALL_SUCCEEDED"
+        ]
+    }
+}

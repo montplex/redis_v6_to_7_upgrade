@@ -1,0 +1,58 @@
+{
+    "FAILOVER": {
+        "summary": "Starts a coordinated failover from a server to one of its replicas.",
+        "complexity": "O(1)",
+        "group": "server",
+        "since": "6.2.0",
+        "arity": -1,
+        "command_flags": [
+            "ADMIN",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "target",
+                "type": "block",
+                "token": "TO",
+                "arguments": [
+                    {
+                        "name": "host",
+                        "type": "string"
+                    },
+                    {
+                        "name": "port",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "force",
+                        "type": "pure-token",
+                        "token": "FORCE",
+                        "optional": true
+                    }
+                ],
+                "optional": true
+            },
+            {
+                "name": "abort",
+                "type": "pure-token",
+                "token": "ABORT",
+                "optional": true
+            },
+            {
+                "name": "milliseconds",
+                "type": "integer",
+                "token": "TIMEOUT",
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

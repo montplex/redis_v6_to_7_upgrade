@@ -1,0 +1,110 @@
+{
+    "HELLO": {
+        "summary": "Handshakes with the Redis server.",
+        "complexity": "O(1)",
+        "group": "connection",
+        "since": "6.0.0",
+        "arity": -1,
+        "command_flags": [
+            "ALLOW_BUSY",
+            "FAST",
+            "LOADING",
+            "NOSCRIPT",
+            "NO_AUTH",
+            "STALE"
+        ],
+        "acl_categories": [
+            "CONNECTION",
+            "FAST"
+        ],
+        "history": [
+            [
+                "6.2.0",
+                "`protover` made optional; when called without arguments the command reports the current connection's context."
+            ]
+        ],
+        "arguments": [
+            {
+                "name": "arguments",
+                "type": "block",
+                "arguments": [
+                    {
+                        "name": "protover",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "auth",
+                        "type": "block",
+                        "token": "AUTH",
+                        "arguments": [
+                            {
+                                "name": "username",
+                                "type": "string"
+                            },
+                            {
+                                "name": "password",
+                                "type": "string"
+                            }
+                        ],
+                        "optional": true
+                    },
+                    {
+                        "name": "clientname",
+                        "type": "string",
+                        "token": "SETNAME",
+                        "optional": true
+                    }
+                ],
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "server": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                },
+                "proto": {
+                    "const": 3
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "mode": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "modules": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "ver": {
+                                "type": "integer"
+                            },
+                            "path": {
+                                "type": "string"
+                            },
+                            "args": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

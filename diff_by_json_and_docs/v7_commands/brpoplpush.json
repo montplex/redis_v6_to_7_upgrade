@@ -1,0 +1,79 @@
+{
+    "BRPOPLPUSH": {
+        "summary": "Pops an element from a list, pushes it to another list and returns it. Block until an element is available otherwise. Deletes the list if the last element was popped.",
+        "complexity": "O(1)",
+        "group": "list",
+        "since": "2.2.0",
+        "arity": 4,
+        "command_flags": [
+            "BLOCKING",
+            "DENYOOM",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "BLOCKING",
+            "LIST",
+            "SLOW",
+            "WRITE"
+        ],
+        "history": [
+            [
+                "6.0.0",
+                "`timeout` is interpreted as a double instead of an integer."
+            ]
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "source",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "destination",
+                "type": "key",
+                "key_spec_index": 1
+            },
+            {
+                "name": "timeout",
+                "type": "double"
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "type": "string",
+                    "description": "The element being popped from source and pushed to destination."
+                },
+                {
+                    "type": "null",
+                    "description": "Timeout is reached."
+                }
+            ]
+        },
+        "deprecated_since": "6.2.0",
+        "replaced_by": "`BLMOVE` with the `RIGHT` and `LEFT` arguments",
+        "doc_flags": [
+            "DEPRECATED"
+        ]
+    }
+}

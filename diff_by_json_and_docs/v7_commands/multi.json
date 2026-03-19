@@ -1,0 +1,23 @@
+{
+    "MULTI": {
+        "summary": "Starts a transaction.",
+        "complexity": "O(1)",
+        "group": "transactions",
+        "since": "1.2.0",
+        "arity": 1,
+        "command_flags": [
+            "ALLOW_BUSY",
+            "FAST",
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "FAST",
+            "TRANSACTION"
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

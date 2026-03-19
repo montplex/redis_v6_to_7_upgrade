@@ -1,0 +1,22 @@
+{
+    "RESET": {
+        "summary": "Resets the connection.",
+        "complexity": "O(1)",
+        "group": "connection",
+        "since": "6.2.0",
+        "arity": 1,
+        "command_flags": [
+            "FAST",
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "CONNECTION",
+            "FAST"
+        ],
+        "reply_schema": {
+            "const": "RESET"
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "HOST:": {
+        "summary": "",
+        "complexity": "",
+        "group": "",
+        "since": "",
+        "arity": -1,
+        "command_flags": [
+            "LOADING",
+            "READONLY",
+            "STALE"
+        ],
+        "acl_categories": [
+            "READ",
+            "SLOW"
+        ]
+    }
+}

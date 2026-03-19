@@ -1,0 +1,24 @@
+{
+    "CLIENT|UNPAUSE": {
+        "summary": "Resumes processing commands from paused clients.",
+        "complexity": "O(N) Where N is the number of paused clients",
+        "group": "connection",
+        "since": "6.2.0",
+        "arity": 2,
+        "command_flags": [
+            "ADMIN",
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "CONNECTION",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

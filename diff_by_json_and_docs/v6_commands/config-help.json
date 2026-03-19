@@ -1,0 +1,23 @@
+{
+    "CONFIG|HELP": {
+        "summary": "Returns helpful text about the different subcommands.",
+        "complexity": "O(1)",
+        "group": "server",
+        "since": "5.0.0",
+        "arity": 2,
+        "command_flags": [
+            "LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "SLOW"
+        ],
+        "reply_schema": {
+            "type": "array",
+            "description": "Helpful text about subcommands.",
+            "items": {
+                "type": "string"
+            }
+        }
+    }
+}

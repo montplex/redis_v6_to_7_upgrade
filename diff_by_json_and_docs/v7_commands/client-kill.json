@@ -1,0 +1,156 @@
+{
+    "CLIENT|KILL": {
+        "summary": "Terminates open connections.",
+        "complexity": "O(N) where N is the number of client connections",
+        "group": "connection",
+        "since": "2.4.0",
+        "arity": -3,
+        "command_flags": [
+            "ADMIN",
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "CONNECTION",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "history": [
+            [
+                "2.8.12",
+                "Added new filter format."
+            ],
+            [
+                "2.8.12",
+                "`ID` option."
+            ],
+            [
+                "3.2.0",
+                "Added `master` type in for `TYPE` option."
+            ],
+            [
+                "5.0.0",
+                "Replaced `slave` `TYPE` with `replica`. `slave` still supported for backward compatibility."
+            ],
+            [
+                "6.2.0",
+                "`LADDR` option."
+            ]
+        ],
+        "arguments": [
+            {
+                "name": "filter",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "old-format",
+                        "type": "string",
+                        "deprecated_since": "2.8.12"
+                    },
+                    {
+                        "name": "new-format",
+                        "type": "oneof",
+                        "arguments": [
+                            {
+                                "name": "client-id",
+                                "type": "integer",
+                                "token": "ID",
+                                "since": "2.8.12",
+                                "optional": true
+                            },
+                            {
+                                "name": "client-type",
+                                "type": "oneof",
+                                "token": "TYPE",
+                                "since": "2.8.12",
+                                "arguments": [
+                                    {
+                                        "name": "normal",
+                                        "type": "pure-token",
+                                        "token": "NORMAL"
+                                    },
+                                    {
+                                        "name": "master",
+                                        "type": "pure-token",
+                                        "token": "MASTER",
+                                        "since": "3.2.0"
+                                    },
+                                    {
+                                        "name": "slave",
+                                        "type": "pure-token",
+                                        "token": "SLAVE"
+                                    },
+                                    {
+                                        "name": "replica",
+                                        "type": "pure-token",
+                                        "token": "REPLICA",
+                                        "since": "5.0.0"
+                                    },
+                                    {
+                                        "name": "pubsub",
+                                        "type": "pure-token",
+                                        "token": "PUBSUB"
+                                    }
+                                ],
+                                "optional": true
+                            },
+                            {
+                                "name": "username",
+                                "type": "string",
+                                "token": "USER",
+                                "optional": true
+                            },
+                            {
+                                "name": "addr",
+                                "type": "string",
+                                "token": "ADDR",
+                                "optional": true
+                            },
+                            {
+                                "name": "laddr",
+                                "type": "string",
+                                "token": "LADDR",
+                                "since": "6.2.0",
+                                "optional": true
+                            },
+                            {
+                                "name": "skipme",
+                                "type": "oneof",
+                                "token": "SKIPME",
+                                "arguments": [
+                                    {
+                                        "name": "yes",
+                                        "type": "pure-token",
+                                        "token": "YES"
+                                    },
+                                    {
+                                        "name": "no",
+                                        "type": "pure-token",
+                                        "token": "NO"
+                                    }
+                                ],
+                                "optional": true
+                            }
+                        ],
+                        "multiple": true
+                    }
+                ]
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "when called in 3 argument format",
+                    "const": "OK"
+                },
+                {
+                    "description": "when called in filter/value format, the number of clients killed",
+                    "type": "integer",
+                    "minimum": 0
+                }
+            ]
+        }
+    }
+}

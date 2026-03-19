@@ -1,0 +1,30 @@
+{
+    "LATENCY|GRAPH": {
+        "summary": "Returns a latency graph for an event.",
+        "complexity": "O(1)",
+        "group": "server",
+        "since": "2.8.13",
+        "arity": 3,
+        "command_flags": [
+            "ADMIN",
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "event",
+                "type": "string"
+            }
+        ],
+        "reply_schema": {
+            "type": "string",
+            "description": "Latency graph"
+        }
+    }
+}

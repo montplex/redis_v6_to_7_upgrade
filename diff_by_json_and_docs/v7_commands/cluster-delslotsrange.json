@@ -1,0 +1,39 @@
+{
+    "CLUSTER|DELSLOTSRANGE": {
+        "summary": "Sets hash slot ranges as unbound for a node.",
+        "complexity": "O(N) where N is the total number of the slots between the start slot and end slot arguments.",
+        "group": "cluster",
+        "since": "7.0.0",
+        "arity": -4,
+        "command_flags": [
+            "ADMIN",
+            "NO_ASYNC_LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "range",
+                "type": "block",
+                "arguments": [
+                    {
+                        "name": "start-slot",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "end-slot",
+                        "type": "integer"
+                    }
+                ],
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

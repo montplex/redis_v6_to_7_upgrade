@@ -1,0 +1,21 @@
+{
+    "ACL|WHOAMI": {
+        "summary": "Returns the authenticated username of the current connection.",
+        "complexity": "O(1)",
+        "group": "server",
+        "since": "6.0.0",
+        "arity": 2,
+        "command_flags": [
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "SLOW"
+        ],
+        "reply_schema": {
+            "type": "string",
+            "description": "The username of the current connection."
+        }
+    }
+}

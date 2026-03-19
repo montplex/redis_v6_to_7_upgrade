@@ -1,0 +1,68 @@
+{
+    "RENAMENX": {
+        "summary": "Renames a key only when the target key name doesn't exist.",
+        "complexity": "O(1)",
+        "group": "generic",
+        "since": "1.0.0",
+        "arity": 3,
+        "command_flags": [
+            "FAST",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "FAST",
+            "KEYSPACE",
+            "WRITE"
+        ],
+        "history": [
+            [
+                "3.2.0",
+                "The command no longer returns an error when source and destination names are the same."
+            ]
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "newkey",
+                "type": "key",
+                "key_spec_index": 1
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "key was renamed to newkey",
+                    "const": 1
+                },
+                {
+                    "description": "new key already exists",
+                    "const": 0
+                }
+            ]
+        }
+    }
+}

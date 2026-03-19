@@ -1,0 +1,44 @@
+{
+    "BGSAVE": {
+        "summary": "Asynchronously saves the database(s) to disk.",
+        "complexity": "O(1)",
+        "group": "server",
+        "since": "1.0.0",
+        "arity": -1,
+        "command_flags": [
+            "ADMIN",
+            "NOSCRIPT",
+            "NO_ASYNC_LOADING"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "history": [
+            [
+                "3.2.2",
+                "Added the `SCHEDULE` option."
+            ]
+        ],
+        "arguments": [
+            {
+                "name": "schedule",
+                "type": "pure-token",
+                "token": "SCHEDULE",
+                "since": "3.2.2",
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "const": "Background saving started"
+                },
+                {
+                    "const": "Background saving scheduled"
+                }
+            ]
+        }
+    }
+}

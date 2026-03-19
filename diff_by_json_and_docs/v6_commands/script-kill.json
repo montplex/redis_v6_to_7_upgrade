@@ -1,0 +1,20 @@
+{
+    "SCRIPT|KILL": {
+        "summary": "Terminates a server-side Lua script during execution.",
+        "complexity": "O(1)",
+        "group": "scripting",
+        "since": "2.6.0",
+        "arity": 2,
+        "command_flags": [
+            "ALLOW_BUSY",
+            "NOSCRIPT"
+        ],
+        "acl_categories": [
+            "SCRIPTING",
+            "SLOW"
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

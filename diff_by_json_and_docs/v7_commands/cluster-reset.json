@@ -1,0 +1,41 @@
+{
+    "CLUSTER|RESET": {
+        "summary": "Resets a node.",
+        "complexity": "O(N) where N is the number of known nodes. The command may execute a FLUSHALL as a side effect.",
+        "group": "cluster",
+        "since": "3.0.0",
+        "arity": -2,
+        "command_flags": [
+            "ADMIN",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "reset-type",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "hard",
+                        "type": "pure-token",
+                        "token": "HARD"
+                    },
+                    {
+                        "name": "soft",
+                        "type": "pure-token",
+                        "token": "SOFT"
+                    }
+                ],
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

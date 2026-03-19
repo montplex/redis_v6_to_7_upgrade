@@ -1,0 +1,83 @@
+{
+    "BITPOS": {
+        "summary": "Finds the first set (1) or clear (0) bit in a string.",
+        "complexity": "O(N)",
+        "group": "bitmap",
+        "since": "2.8.7",
+        "arity": -3,
+        "command_flags": [
+            "READONLY"
+        ],
+        "acl_categories": [
+            "BITMAP",
+            "READ",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "bit",
+                "type": "integer"
+            },
+            {
+                "name": "range",
+                "type": "block",
+                "arguments": [
+                    {
+                        "name": "start",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "end-unit-block",
+                        "type": "block",
+                        "arguments": [
+                            {
+                                "name": "end",
+                                "type": "integer"
+                            }
+                        ],
+                        "optional": true
+                    }
+                ],
+                "optional": true
+            }
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RO",
+                    "ACCESS"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "the position of the first bit set to 1 or 0 according to the request",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                {
+                    "description": "In case the `bit` argument is 1 and the string is empty or composed of just zero bytes",
+                    "const": -1
+                }
+            ]
+        }
+    }
+}

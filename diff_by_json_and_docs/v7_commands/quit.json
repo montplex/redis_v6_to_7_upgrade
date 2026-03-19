@@ -1,0 +1,29 @@
+{
+    "QUIT": {
+        "summary": "Closes the connection.",
+        "complexity": "O(1)",
+        "group": "connection",
+        "since": "1.0.0",
+        "arity": -1,
+        "command_flags": [
+            "ALLOW_BUSY",
+            "FAST",
+            "LOADING",
+            "NOSCRIPT",
+            "NO_AUTH",
+            "STALE"
+        ],
+        "acl_categories": [
+            "CONNECTION",
+            "FAST"
+        ],
+        "reply_schema": {
+            "const": "OK"
+        },
+        "deprecated_since": "7.2.0",
+        "replaced_by": "just closing the connection",
+        "doc_flags": [
+            "DEPRECATED"
+        ]
+    }
+}

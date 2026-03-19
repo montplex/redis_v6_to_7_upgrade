@@ -1,0 +1,53 @@
+{
+    "SPUBLISH": {
+        "summary": "Post a message to a shard channel",
+        "complexity": "O(N) where N is the number of clients subscribed to the receiving shard channel.",
+        "group": "pubsub",
+        "since": "7.0.0",
+        "arity": 3,
+        "command_flags": [
+            "FAST",
+            "LOADING",
+            "PUBSUB",
+            "STALE"
+        ],
+        "acl_categories": [
+            "FAST",
+            "PUBSUB"
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "shardchannel",
+                "type": "string"
+            },
+            {
+                "name": "message",
+                "type": "string"
+            }
+        ],
+        "reply_schema": {
+            "description": "the number of clients that received the message. Note that in a Redis Cluster, only clients that are connected to the same node as the publishing client are included in the count",
+            "type": "integer",
+            "minimum": 0
+        }
+    }
+}

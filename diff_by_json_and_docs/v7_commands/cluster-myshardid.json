@@ -1,0 +1,22 @@
+{
+    "CLUSTER|MYSHARDID": {
+        "summary": "Returns the shard ID of a node.",
+        "complexity": "O(1)",
+        "group": "cluster",
+        "since": "7.2.0",
+        "arity": 2,
+        "command_flags": [
+            "STALE"
+        ],
+        "acl_categories": [
+            "SLOW"
+        ],
+        "reply_schema": {
+            "description": "the node's shard id",
+            "type": "string"
+        },
+        "command_tips": [
+            "NONDETERMINISTIC_OUTPUT"
+        ]
+    }
+}

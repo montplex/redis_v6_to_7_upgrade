@@ -1,0 +1,47 @@
+{
+    "MODULE|LIST": {
+        "summary": "Returns all loaded modules.",
+        "complexity": "O(N) where N is the number of loaded modules.",
+        "group": "server",
+        "since": "4.0.0",
+        "arity": 2,
+        "command_flags": [
+            "ADMIN",
+            "NOSCRIPT"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "reply_schema": {
+            "type": "array",
+            "description": "Returns information about the modules loaded to the server.",
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the module."
+                    },
+                    "ver": {
+                        "type": "integer",
+                        "description": "Version of the module."
+                    },
+                    "path": {
+                        "type": "string",
+                        "description": "Module path."
+                    },
+                    "args": {
+                        "type": "array",
+                        "description": "Module arguments.",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

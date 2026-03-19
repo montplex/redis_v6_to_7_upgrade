@@ -1,0 +1,60 @@
+{
+    "GETBIT": {
+        "summary": "Returns a bit value by offset.",
+        "complexity": "O(1)",
+        "group": "bitmap",
+        "since": "2.2.0",
+        "arity": 3,
+        "command_flags": [
+            "FAST",
+            "READONLY"
+        ],
+        "acl_categories": [
+            "BITMAP",
+            "FAST",
+            "READ"
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "offset",
+                "type": "integer"
+            }
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RO",
+                    "ACCESS"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "description": "The bit value stored at offset.",
+            "oneOf": [
+                {
+                    "const": 0
+                },
+                {
+                    "const": 1
+                }
+            ]
+        }
+    }
+}

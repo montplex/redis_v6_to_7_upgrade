@@ -1,0 +1,26 @@
+{
+    "ECHO": {
+        "summary": "Returns the given string.",
+        "complexity": "O(1)",
+        "group": "connection",
+        "since": "1.0.0",
+        "arity": 2,
+        "command_flags": [
+            "FAST"
+        ],
+        "acl_categories": [
+            "CONNECTION",
+            "FAST"
+        ],
+        "arguments": [
+            {
+                "name": "message",
+                "type": "string"
+            }
+        ],
+        "reply_schema": {
+            "description": "The given string",
+            "type": "string"
+        }
+    }
+}

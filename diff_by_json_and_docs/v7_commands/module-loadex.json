@@ -1,0 +1,53 @@
+{
+    "MODULE|LOADEX": {
+        "summary": "Loads a module using extended parameters.",
+        "complexity": "O(1)",
+        "group": "server",
+        "since": "7.0.0",
+        "arity": -3,
+        "command_flags": [
+            "ADMIN",
+            "NOSCRIPT",
+            "NO_ASYNC_LOADING"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "path",
+                "type": "string"
+            },
+            {
+                "name": "configs",
+                "type": "block",
+                "token": "CONFIG",
+                "arguments": [
+                    {
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "value",
+                        "type": "string"
+                    }
+                ],
+                "optional": true,
+                "multiple": true,
+                "multiple_token": true
+            },
+            {
+                "name": "args",
+                "type": "string",
+                "token": "ARGS",
+                "optional": true,
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

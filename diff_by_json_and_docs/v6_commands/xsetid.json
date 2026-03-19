@@ -1,0 +1,53 @@
+{
+    "XSETID": {
+        "summary": "An internal command for replicating stream values.",
+        "complexity": "O(1)",
+        "group": "stream",
+        "since": "5.0.0",
+        "arity": 3,
+        "command_flags": [
+            "DENYOOM",
+            "FAST",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "FAST",
+            "STREAM",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "last-id",
+                "type": "string"
+            }
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

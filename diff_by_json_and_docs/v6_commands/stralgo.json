@@ -1,0 +1,18 @@
+{
+    "STRALGO": {
+        "summary": "",
+        "complexity": "",
+        "group": "",
+        "since": "",
+        "arity": -2,
+        "command_flags": [
+            "MOVABLEKEYS",
+            "READONLY"
+        ],
+        "acl_categories": [
+            "READ",
+            "SLOW",
+            "STRING"
+        ]
+    }
+}

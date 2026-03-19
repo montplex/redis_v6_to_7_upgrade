@@ -1,0 +1,29 @@
+{
+    "CLUSTER|ADDSLOTS": {
+        "summary": "Assigns new hash slots to a node.",
+        "complexity": "O(N) where N is the total number of hash slot arguments",
+        "group": "cluster",
+        "since": "3.0.0",
+        "arity": -3,
+        "command_flags": [
+            "ADMIN",
+            "NO_ASYNC_LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "slot",
+                "type": "integer",
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

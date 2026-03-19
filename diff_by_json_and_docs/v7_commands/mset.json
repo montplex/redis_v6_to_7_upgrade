@@ -1,0 +1,63 @@
+{
+    "MSET": {
+        "summary": "Atomically creates or modifies the string values of one or more keys.",
+        "complexity": "O(N) where N is the number of keys to set.",
+        "group": "string",
+        "since": "1.0.1",
+        "arity": -3,
+        "command_flags": [
+            "DENYOOM",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "SLOW",
+            "STRING",
+            "WRITE"
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": -1,
+                        "step": 2,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "data",
+                "type": "block",
+                "arguments": [
+                    {
+                        "name": "key",
+                        "type": "key",
+                        "key_spec_index": 0
+                    },
+                    {
+                        "name": "value",
+                        "type": "string"
+                    }
+                ],
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        },
+        "command_tips": [
+            "REQUEST_POLICY:MULTI_SHARD",
+            "RESPONSE_POLICY:ALL_SUCCEEDED"
+        ]
+    }
+}

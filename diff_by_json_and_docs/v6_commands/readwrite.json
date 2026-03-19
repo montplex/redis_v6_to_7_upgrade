@@ -1,0 +1,19 @@
+{
+    "READWRITE": {
+        "summary": "Enables read-write queries for a connection to a Reids Cluster replica node.",
+        "complexity": "O(1)",
+        "group": "cluster",
+        "since": "3.0.0",
+        "arity": 1,
+        "command_flags": [
+            "FAST"
+        ],
+        "acl_categories": [
+            "FAST",
+            "KEYSPACE"
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

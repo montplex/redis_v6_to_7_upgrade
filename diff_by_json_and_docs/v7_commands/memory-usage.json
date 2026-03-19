@@ -1,0 +1,61 @@
+{
+    "MEMORY|USAGE": {
+        "summary": "Estimates the memory usage of a key.",
+        "complexity": "O(N) where N is the number of samples.",
+        "group": "server",
+        "since": "4.0.0",
+        "arity": -3,
+        "command_flags": [
+            "READONLY"
+        ],
+        "acl_categories": [
+            "READ",
+            "SLOW"
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RO",
+                    "ACCESS"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 2
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "count",
+                "type": "integer",
+                "token": "SAMPLES",
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "Number of bytes that a key and its value require to be stored in RAM.",
+                    "type": "integer"
+                },
+                {
+                    "description": "Key does not exist.",
+                    "type": "null"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,45 @@
+{
+    "EVALSHA": {
+        "summary": "Executes a server-side Lua script by SHA1 digest.",
+        "complexity": "Depends on the script that is executed.",
+        "group": "scripting",
+        "since": "2.6.0",
+        "arity": -3,
+        "command_flags": [
+            "MAY_REPLICATE",
+            "MOVABLEKEYS",
+            "NOSCRIPT",
+            "SKIP_MONITOR"
+        ],
+        "acl_categories": [
+            "SCRIPTING",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "sha1",
+                "type": "string"
+            },
+            {
+                "name": "numkeys",
+                "type": "integer"
+            },
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0,
+                "optional": true,
+                "multiple": true
+            },
+            {
+                "name": "arg",
+                "type": "string",
+                "optional": true,
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "description": "Return value depends on the script that is executed"
+        }
+    }
+}

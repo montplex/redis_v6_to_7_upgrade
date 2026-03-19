@@ -1,0 +1,78 @@
+{
+    "CLIENT|TRACKING": {
+        "summary": "Controls server-assisted client-side caching for the connection.",
+        "complexity": "O(1). Some options may introduce additional complexity.",
+        "group": "connection",
+        "since": "6.0.0",
+        "arity": -3,
+        "command_flags": [
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "CONNECTION",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "status",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "on",
+                        "type": "pure-token",
+                        "token": "ON"
+                    },
+                    {
+                        "name": "off",
+                        "type": "pure-token",
+                        "token": "OFF"
+                    }
+                ]
+            },
+            {
+                "name": "client-id",
+                "type": "integer",
+                "token": "REDIRECT",
+                "optional": true
+            },
+            {
+                "name": "prefix",
+                "type": "string",
+                "token": "PREFIX",
+                "optional": true,
+                "multiple": true,
+                "multiple_token": true
+            },
+            {
+                "name": "bcast",
+                "type": "pure-token",
+                "token": "BCAST",
+                "optional": true
+            },
+            {
+                "name": "optin",
+                "type": "pure-token",
+                "token": "OPTIN",
+                "optional": true
+            },
+            {
+                "name": "optout",
+                "type": "pure-token",
+                "token": "OPTOUT",
+                "optional": true
+            },
+            {
+                "name": "noloop",
+                "type": "pure-token",
+                "token": "NOLOOP",
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "description": "if the client was successfully put into or taken out of tracking mode",
+            "const": "OK"
+        }
+    }
+}

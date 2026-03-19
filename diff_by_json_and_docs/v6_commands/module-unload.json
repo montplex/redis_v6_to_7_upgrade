@@ -1,0 +1,28 @@
+{
+    "MODULE|UNLOAD": {
+        "summary": "Unloads a module.",
+        "complexity": "O(1)",
+        "group": "server",
+        "since": "4.0.0",
+        "arity": 3,
+        "command_flags": [
+            "ADMIN",
+            "NOSCRIPT",
+            "NO_ASYNC_LOADING"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "name",
+                "type": "string"
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

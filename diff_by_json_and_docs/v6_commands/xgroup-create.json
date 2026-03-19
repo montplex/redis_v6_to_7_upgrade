@@ -1,0 +1,79 @@
+{
+    "XGROUP|CREATE": {
+        "summary": "Creates a consumer group.",
+        "complexity": "O(1)",
+        "group": "stream",
+        "since": "5.0.0",
+        "arity": -5,
+        "command_flags": [
+            "DENYOOM",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "SLOW",
+            "STREAM",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "group",
+                "type": "string"
+            },
+            {
+                "name": "id-selector",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "name": "new-id",
+                        "type": "pure-token",
+                        "token": "$"
+                    }
+                ]
+            },
+            {
+                "name": "mkstream",
+                "type": "pure-token",
+                "token": "MKSTREAM",
+                "optional": true
+            },
+            {
+                "name": "entries-read",
+                "type": "integer",
+                "token": "ENTRIESREAD",
+                "optional": true
+            }
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 2
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "LOLWUT": {
+        "summary": "Displays computer art and the Redis version",
+        "complexity": "",
+        "group": "server",
+        "since": "5.0.0",
+        "arity": -1,
+        "command_flags": [
+            "FAST",
+            "READONLY"
+        ],
+        "acl_categories": [
+            "FAST",
+            "READ"
+        ],
+        "arguments": [
+            {
+                "name": "version",
+                "type": "integer",
+                "token": "VERSION",
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "type": "string",
+            "description": "String containing the generative computer art, and a text with the Redis version."
+        }
+    }
+}

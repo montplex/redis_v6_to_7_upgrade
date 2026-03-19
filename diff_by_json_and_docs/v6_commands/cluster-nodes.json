@@ -1,0 +1,19 @@
+{
+    "CLUSTER|NODES": {
+        "summary": "Returns the cluster configuration for a node.",
+        "complexity": "O(N) where N is the total number of Cluster nodes",
+        "group": "cluster",
+        "since": "3.0.0",
+        "arity": 2,
+        "command_flags": [
+            "STALE"
+        ],
+        "acl_categories": [
+            "SLOW"
+        ],
+        "reply_schema": {
+            "description": "the serialized cluster configuration",
+            "type": "string"
+        }
+    }
+}

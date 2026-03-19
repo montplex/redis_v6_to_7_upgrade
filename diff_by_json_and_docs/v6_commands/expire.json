@@ -1,0 +1,61 @@
+{
+    "EXPIRE": {
+        "summary": "Sets the expiration time of a key in seconds.",
+        "complexity": "O(1)",
+        "group": "generic",
+        "since": "1.0.0",
+        "arity": 3,
+        "command_flags": [
+            "FAST",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "FAST",
+            "KEYSPACE",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "seconds",
+                "type": "integer"
+            }
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "The timeout was not set. e.g. key doesn't exist, or operation skipped due to the provided arguments.",
+                    "const": 0
+                },
+                {
+                    "description": "The timeout was set.",
+                    "const": 1
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "RENAME": {
+        "summary": "Renames a key and overwrites the destination.",
+        "complexity": "O(1)",
+        "group": "generic",
+        "since": "1.0.0",
+        "arity": 3,
+        "command_flags": [
+            "WRITE"
+        ],
+        "acl_categories": [
+            "KEYSPACE",
+            "SLOW",
+            "WRITE"
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "newkey",
+                "type": "key",
+                "key_spec_index": 1
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

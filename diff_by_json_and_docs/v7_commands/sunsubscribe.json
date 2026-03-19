@@ -1,0 +1,46 @@
+{
+    "SUNSUBSCRIBE": {
+        "summary": "Stops listening to messages posted to shard channels.",
+        "complexity": "O(N) where N is the number of shard channels to unsubscribe.",
+        "group": "pubsub",
+        "since": "7.0.0",
+        "arity": -1,
+        "command_flags": [
+            "LOADING",
+            "NOSCRIPT",
+            "PUBSUB",
+            "STALE"
+        ],
+        "acl_categories": [
+            "PUBSUB",
+            "SLOW"
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": -1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "shardchannel",
+                "type": "string",
+                "optional": true,
+                "multiple": true
+            }
+        ]
+    }
+}

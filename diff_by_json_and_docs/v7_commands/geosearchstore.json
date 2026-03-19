@@ -1,0 +1,211 @@
+{
+    "GEOSEARCHSTORE": {
+        "summary": "Queries a geospatial index for members inside an area of a box or a circle, optionally stores the result.",
+        "complexity": "O(N+log(M)) where N is the number of elements in the grid-aligned bounding box area around the shape provided as the filter and M is the number of items inside the shape",
+        "group": "geo",
+        "since": "6.2.0",
+        "arity": -8,
+        "command_flags": [
+            "DENYOOM",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "GEO",
+            "SLOW",
+            "WRITE"
+        ],
+        "history": [
+            [
+                "7.0.0",
+                "Added support for uppercase unit names."
+            ]
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "destination",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "source",
+                "type": "key",
+                "key_spec_index": 1
+            },
+            {
+                "name": "from",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "member",
+                        "type": "string",
+                        "token": "FROMMEMBER"
+                    },
+                    {
+                        "name": "fromlonlat",
+                        "type": "block",
+                        "token": "FROMLONLAT",
+                        "arguments": [
+                            {
+                                "name": "longitude",
+                                "type": "double"
+                            },
+                            {
+                                "name": "latitude",
+                                "type": "double"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "by",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "circle",
+                        "type": "block",
+                        "arguments": [
+                            {
+                                "name": "radius",
+                                "type": "double",
+                                "token": "BYRADIUS"
+                            },
+                            {
+                                "name": "unit",
+                                "type": "oneof",
+                                "arguments": [
+                                    {
+                                        "name": "m",
+                                        "type": "pure-token",
+                                        "token": "M"
+                                    },
+                                    {
+                                        "name": "km",
+                                        "type": "pure-token",
+                                        "token": "KM"
+                                    },
+                                    {
+                                        "name": "ft",
+                                        "type": "pure-token",
+                                        "token": "FT"
+                                    },
+                                    {
+                                        "name": "mi",
+                                        "type": "pure-token",
+                                        "token": "MI"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "box",
+                        "type": "block",
+                        "arguments": [
+                            {
+                                "name": "width",
+                                "type": "double",
+                                "token": "BYBOX"
+                            },
+                            {
+                                "name": "height",
+                                "type": "double"
+                            },
+                            {
+                                "name": "unit",
+                                "type": "oneof",
+                                "arguments": [
+                                    {
+                                        "name": "m",
+                                        "type": "pure-token",
+                                        "token": "M"
+                                    },
+                                    {
+                                        "name": "km",
+                                        "type": "pure-token",
+                                        "token": "KM"
+                                    },
+                                    {
+                                        "name": "ft",
+                                        "type": "pure-token",
+                                        "token": "FT"
+                                    },
+                                    {
+                                        "name": "mi",
+                                        "type": "pure-token",
+                                        "token": "MI"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "order",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "asc",
+                        "type": "pure-token",
+                        "token": "ASC"
+                    },
+                    {
+                        "name": "desc",
+                        "type": "pure-token",
+                        "token": "DESC"
+                    }
+                ],
+                "optional": true
+            },
+            {
+                "name": "count-block",
+                "type": "block",
+                "arguments": [
+                    {
+                        "name": "count",
+                        "type": "integer",
+                        "token": "COUNT"
+                    },
+                    {
+                        "name": "any",
+                        "type": "pure-token",
+                        "token": "ANY",
+                        "optional": true
+                    }
+                ],
+                "optional": true
+            },
+            {
+                "name": "storedist",
+                "type": "pure-token",
+                "token": "STOREDIST",
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "description": "the number of elements in the resulting set",
+            "type": "integer"
+        }
+    }
+}

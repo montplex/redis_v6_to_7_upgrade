@@ -1,0 +1,27 @@
+{
+    "SELECT": {
+        "summary": "Changes the selected database.",
+        "complexity": "O(1)",
+        "group": "connection",
+        "since": "1.0.0",
+        "arity": 2,
+        "command_flags": [
+            "FAST",
+            "LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "FAST",
+            "KEYSPACE"
+        ],
+        "arguments": [
+            {
+                "name": "index",
+                "type": "integer"
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

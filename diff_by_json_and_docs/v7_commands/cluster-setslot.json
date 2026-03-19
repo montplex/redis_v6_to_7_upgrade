@@ -1,0 +1,54 @@
+{
+    "CLUSTER|SETSLOT": {
+        "summary": "Binds a hash slot to a node.",
+        "complexity": "O(1)",
+        "group": "cluster",
+        "since": "3.0.0",
+        "arity": -4,
+        "command_flags": [
+            "ADMIN",
+            "NO_ASYNC_LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "slot",
+                "type": "integer"
+            },
+            {
+                "name": "subcommand",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "importing",
+                        "type": "string",
+                        "token": "IMPORTING"
+                    },
+                    {
+                        "name": "migrating",
+                        "type": "string",
+                        "token": "MIGRATING"
+                    },
+                    {
+                        "name": "node",
+                        "type": "string",
+                        "token": "NODE"
+                    },
+                    {
+                        "name": "stable",
+                        "type": "pure-token",
+                        "token": "STABLE"
+                    }
+                ]
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

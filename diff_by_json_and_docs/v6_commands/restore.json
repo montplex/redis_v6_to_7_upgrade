@@ -1,0 +1,99 @@
+{
+    "RESTORE": {
+        "summary": "Creates a key from the serialized representation of a value.",
+        "complexity": "O(1) to create the new key and additional O(N*M) to reconstruct the serialized value, where N is the number of Redis objects composing the value and M their average size. For small string values the time complexity is thus O(1)+O(1*M) where M is small, so simply O(1). However for sorted set values the complexity is O(N*M*log(N)) because inserting values into sorted sets is O(log(N)).",
+        "group": "generic",
+        "since": "2.6.0",
+        "arity": -4,
+        "command_flags": [
+            "DENYOOM",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "DANGEROUS",
+            "KEYSPACE",
+            "SLOW",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "ttl",
+                "type": "integer"
+            },
+            {
+                "name": "serialized-value",
+                "type": "string"
+            },
+            {
+                "name": "replace",
+                "type": "pure-token",
+                "token": "REPLACE",
+                "since": "3.0.0",
+                "optional": true
+            },
+            {
+                "name": "absttl",
+                "type": "pure-token",
+                "token": "ABSTTL",
+                "since": "5.0.0",
+                "optional": true
+            },
+            {
+                "name": "seconds",
+                "type": "integer",
+                "token": "IDLETIME",
+                "since": "5.0.0",
+                "optional": true
+            },
+            {
+                "name": "frequency",
+                "type": "integer",
+                "token": "FREQ",
+                "since": "5.0.0",
+                "optional": true
+            }
+        ],
+        "history": [
+            [
+                "3.0.0",
+                "Added the `REPLACE` modifier."
+            ],
+            [
+                "5.0.0",
+                "Added the `ABSTTL` modifier."
+            ],
+            [
+                "5.0.0",
+                "Added the `IDLETIME` and `FREQ` options."
+            ]
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

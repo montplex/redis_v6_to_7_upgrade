@@ -1,0 +1,56 @@
+{
+    "OBJECT|ENCODING": {
+        "summary": "Returns the internal encoding of a Redis object.",
+        "complexity": "O(1)",
+        "group": "generic",
+        "since": "2.2.3",
+        "arity": 3,
+        "command_flags": [
+            "READONLY"
+        ],
+        "acl_categories": [
+            "KEYSPACE",
+            "READ",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            }
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RO",
+                    "ACCESS"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 2
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "key doesn't exist",
+                    "type": "null"
+                },
+                {
+                    "description": "encoding of the object",
+                    "type": "string"
+                }
+            ]
+        }
+    }
+}

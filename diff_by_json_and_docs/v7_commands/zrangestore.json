@@ -1,0 +1,101 @@
+{
+    "ZRANGESTORE": {
+        "summary": "Stores a range of members from sorted set in a key.",
+        "complexity": "O(log(N)+M) with N being the number of elements in the sorted set and M the number of elements stored into the destination key.",
+        "group": "sorted-set",
+        "since": "6.2.0",
+        "arity": -5,
+        "command_flags": [
+            "DENYOOM",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "SLOW",
+            "SORTEDSET",
+            "WRITE"
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "dst",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "src",
+                "type": "key",
+                "key_spec_index": 1
+            },
+            {
+                "name": "min",
+                "type": "string"
+            },
+            {
+                "name": "max",
+                "type": "string"
+            },
+            {
+                "name": "sortby",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "byscore",
+                        "type": "pure-token",
+                        "token": "BYSCORE"
+                    },
+                    {
+                        "name": "bylex",
+                        "type": "pure-token",
+                        "token": "BYLEX"
+                    }
+                ],
+                "optional": true
+            },
+            {
+                "name": "rev",
+                "type": "pure-token",
+                "token": "REV",
+                "optional": true
+            },
+            {
+                "name": "limit",
+                "type": "block",
+                "token": "LIMIT",
+                "arguments": [
+                    {
+                        "name": "offset",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "count",
+                        "type": "integer"
+                    }
+                ],
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "type": "integer",
+            "description": "Number of elements in the resulting sorted set."
+        }
+    }
+}

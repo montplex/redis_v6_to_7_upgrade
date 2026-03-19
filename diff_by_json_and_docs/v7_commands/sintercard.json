@@ -1,0 +1,41 @@
+{
+    "SINTERCARD": {
+        "summary": "Returns the number of members of the intersect of multiple sets.",
+        "complexity": "O(N*M) worst case where N is the cardinality of the smallest set and M is the number of sets.",
+        "group": "set",
+        "since": "7.0.0",
+        "arity": -3,
+        "command_flags": [
+            "MOVABLEKEYS",
+            "READONLY"
+        ],
+        "acl_categories": [
+            "READ",
+            "SET",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "numkeys",
+                "type": "integer"
+            },
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0,
+                "multiple": true
+            },
+            {
+                "name": "limit",
+                "type": "integer",
+                "token": "LIMIT",
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "description": "Number of the elements in the resulting intersection.",
+            "type": "integer",
+            "minimum": 0
+        }
+    }
+}

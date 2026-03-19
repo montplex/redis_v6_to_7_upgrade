@@ -1,0 +1,31 @@
+{
+    "FUNCTION|DELETE": {
+        "summary": "Deletes a library and its functions.",
+        "complexity": "O(1)",
+        "group": "scripting",
+        "since": "7.0.0",
+        "arity": 3,
+        "command_flags": [
+            "NOSCRIPT",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "SCRIPTING",
+            "SLOW",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "library-name",
+                "type": "string"
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        },
+        "command_tips": [
+            "REQUEST_POLICY:ALL_SHARDS",
+            "RESPONSE_POLICY:ALL_SUCCEEDED"
+        ]
+    }
+}

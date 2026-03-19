@@ -1,0 +1,37 @@
+{
+    "COMMAND|GETKEYS": {
+        "summary": "Extracts the key names from an arbitrary command.",
+        "complexity": "O(N) where N is the number of arguments to the command",
+        "group": "server",
+        "since": "2.8.13",
+        "arity": -3,
+        "command_flags": [
+            "LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "CONNECTION",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "command",
+                "type": "string"
+            },
+            {
+                "name": "arg",
+                "type": "string",
+                "optional": true,
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "description": "List of keys from the given Redis command.",
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "uniqueItems": true
+        }
+    }
+}

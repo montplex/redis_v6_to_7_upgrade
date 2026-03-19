@@ -1,0 +1,27 @@
+{
+    "PUNSUBSCRIBE": {
+        "summary": "Stops listening to messages published to channels that match one or more patterns.",
+        "complexity": "O(N) where N is the number of patterns to unsubscribe.",
+        "group": "pubsub",
+        "since": "2.0.0",
+        "arity": -1,
+        "command_flags": [
+            "LOADING",
+            "NOSCRIPT",
+            "PUBSUB",
+            "STALE"
+        ],
+        "acl_categories": [
+            "PUBSUB",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "pattern",
+                "type": "pattern",
+                "optional": true,
+                "multiple": true
+            }
+        ]
+    }
+}

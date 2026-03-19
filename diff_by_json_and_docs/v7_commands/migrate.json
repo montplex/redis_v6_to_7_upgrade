@@ -1,0 +1,158 @@
+{
+    "MIGRATE": {
+        "summary": "Atomically transfers a key from one Redis instance to another.",
+        "complexity": "This command actually executes a DUMP+DEL in the source instance, and a RESTORE in the target instance. See the pages of these commands for time complexity. Also an O(N) data transfer between the two instances is performed.",
+        "group": "generic",
+        "since": "2.6.0",
+        "arity": -6,
+        "command_flags": [
+            "MOVABLEKEYS",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "DANGEROUS",
+            "KEYSPACE",
+            "SLOW",
+            "WRITE"
+        ],
+        "history": [
+            [
+                "3.0.0",
+                "Added the `COPY` and `REPLACE` options."
+            ],
+            [
+                "3.0.6",
+                "Added the `KEYS` option."
+            ],
+            [
+                "4.0.7",
+                "Added the `AUTH` option."
+            ],
+            [
+                "6.0.0",
+                "Added the `AUTH2` option."
+            ]
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 3
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 3,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "host",
+                "type": "string"
+            },
+            {
+                "name": "port",
+                "type": "integer"
+            },
+            {
+                "name": "key-selector",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "key",
+                        "type": "key",
+                        "key_spec_index": 0
+                    },
+                    {
+                        "name": "empty-string",
+                        "type": "pure-token",
+                        "token": ""
+                    }
+                ]
+            },
+            {
+                "name": "destination-db",
+                "type": "integer"
+            },
+            {
+                "name": "timeout",
+                "type": "integer"
+            },
+            {
+                "name": "copy",
+                "type": "pure-token",
+                "token": "COPY",
+                "since": "3.0.0",
+                "optional": true
+            },
+            {
+                "name": "replace",
+                "type": "pure-token",
+                "token": "REPLACE",
+                "since": "3.0.0",
+                "optional": true
+            },
+            {
+                "name": "authentication",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "auth",
+                        "type": "string",
+                        "token": "AUTH",
+                        "since": "4.0.7"
+                    },
+                    {
+                        "name": "auth2",
+                        "type": "block",
+                        "token": "AUTH2",
+                        "since": "6.0.0",
+                        "arguments": [
+                            {
+                                "name": "username",
+                                "type": "string"
+                            },
+                            {
+                                "name": "password",
+                                "type": "string"
+                            }
+                        ]
+                    }
+                ],
+                "optional": true
+            },
+            {
+                "name": "keys",
+                "type": "key",
+                "key_spec_index": 1,
+                "token": "KEYS",
+                "since": "3.0.6",
+                "optional": true,
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "const": "OK",
+                    "description": "Success."
+                },
+                {
+                    "const": "NOKEY",
+                    "description": "No keys were found in the source instance."
+                }
+            ]
+        },
+        "command_tips": [
+            "NONDETERMINISTIC_OUTPUT"
+        ]
+    }
+}

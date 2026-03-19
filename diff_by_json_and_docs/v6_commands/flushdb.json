@@ -1,0 +1,52 @@
+{
+    "FLUSHDB": {
+        "summary": "Remove all keys from the current database.",
+        "complexity": "O(N) where N is the number of keys in the selected database",
+        "group": "server",
+        "since": "1.0.0",
+        "arity": -1,
+        "command_flags": [
+            "WRITE"
+        ],
+        "acl_categories": [
+            "DANGEROUS",
+            "KEYSPACE",
+            "SLOW",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "flush-type",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "async",
+                        "type": "pure-token",
+                        "token": "ASYNC",
+                        "since": "4.0.0"
+                    },
+                    {
+                        "name": "sync",
+                        "type": "pure-token",
+                        "token": "SYNC",
+                        "since": "6.2.0"
+                    }
+                ],
+                "optional": true
+            }
+        ],
+        "history": [
+            [
+                "4.0.0",
+                "Added the `ASYNC` flushing mode modifier."
+            ],
+            [
+                "6.2.0",
+                "Added the `SYNC` flushing mode modifier."
+            ]
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

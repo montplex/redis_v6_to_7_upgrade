@@ -1,0 +1,161 @@
+{
+    "XADD": {
+        "summary": "Appends a new message to a stream. Creates the key if it doesn't exist.",
+        "complexity": "O(1) when adding a new entry, O(N) when trimming where N being the number of entries evicted.",
+        "group": "stream",
+        "since": "5.0.0",
+        "arity": -5,
+        "command_flags": [
+            "DENYOOM",
+            "FAST",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "FAST",
+            "STREAM",
+            "WRITE"
+        ],
+        "history": [
+            [
+                "6.2.0",
+                "Added the `NOMKSTREAM` option, `MINID` trimming strategy and the `LIMIT` option."
+            ],
+            [
+                "7.0.0",
+                "Added support for the `<ms>-*` explicit ID form."
+            ]
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "nomkstream",
+                "type": "pure-token",
+                "token": "NOMKSTREAM",
+                "since": "6.2.0",
+                "optional": true
+            },
+            {
+                "name": "trim",
+                "type": "block",
+                "arguments": [
+                    {
+                        "name": "strategy",
+                        "type": "oneof",
+                        "arguments": [
+                            {
+                                "name": "maxlen",
+                                "type": "pure-token",
+                                "token": "MAXLEN"
+                            },
+                            {
+                                "name": "minid",
+                                "type": "pure-token",
+                                "token": "MINID",
+                                "since": "6.2.0"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "operator",
+                        "type": "oneof",
+                        "arguments": [
+                            {
+                                "name": "equal",
+                                "type": "pure-token",
+                                "token": "="
+                            },
+                            {
+                                "name": "approximately",
+                                "type": "pure-token",
+                                "token": "~"
+                            }
+                        ],
+                        "optional": true
+                    },
+                    {
+                        "name": "threshold",
+                        "type": "string"
+                    },
+                    {
+                        "name": "count",
+                        "type": "integer",
+                        "token": "LIMIT",
+                        "since": "6.2.0",
+                        "optional": true
+                    }
+                ],
+                "optional": true
+            },
+            {
+                "name": "id-selector",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "auto-id",
+                        "type": "pure-token",
+                        "token": "*"
+                    },
+                    {
+                        "name": "id",
+                        "type": "string"
+                    }
+                ]
+            },
+            {
+                "name": "data",
+                "type": "block",
+                "arguments": [
+                    {
+                        "name": "field",
+                        "type": "string"
+                    },
+                    {
+                        "name": "value",
+                        "type": "string"
+                    }
+                ],
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "The ID of the added entry. The ID is the one auto-generated if * is passed as ID argument, otherwise the command just returns the same ID specified by the user during insertion.",
+                    "type": "string",
+                    "pattern": "[0-9]+-[0-9]+"
+                },
+                {
+                    "description": "The NOMKSTREAM option is given and the key doesn't exist.",
+                    "type": "null"
+                }
+            ]
+        },
+        "command_tips": [
+            "NONDETERMINISTIC_OUTPUT"
+        ]
+    }
+}

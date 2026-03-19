@@ -1,0 +1,22 @@
+{
+    "CLUSTER|SAVECONFIG": {
+        "summary": "Forces a node to save the cluster configuration to disk.",
+        "complexity": "O(1)",
+        "group": "cluster",
+        "since": "3.0.0",
+        "arity": 2,
+        "command_flags": [
+            "ADMIN",
+            "NO_ASYNC_LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

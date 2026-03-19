@@ -1,0 +1,28 @@
+{
+    "CLUSTER|SET-CONFIG-EPOCH": {
+        "summary": "Sets the configuration epoch for a new node.",
+        "complexity": "O(1)",
+        "group": "cluster",
+        "since": "3.0.0",
+        "arity": 3,
+        "command_flags": [
+            "ADMIN",
+            "NO_ASYNC_LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "config-epoch",
+                "type": "integer"
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

@@ -1,0 +1,72 @@
+{
+    "SHUTDOWN": {
+        "summary": "Synchronously saves the database(s) to disk and shuts down the Redis server.",
+        "complexity": "O(N) when saving, where N is the total number of keys in all databases when saving data, otherwise O(1)",
+        "group": "server",
+        "since": "1.0.0",
+        "arity": -1,
+        "command_flags": [
+            "ADMIN",
+            "ALLOW_BUSY",
+            "LOADING",
+            "NOSCRIPT",
+            "NO_MULTI",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "history": [
+            [
+                "7.0.0",
+                "Added the `NOW`, `FORCE` and `ABORT` modifiers."
+            ]
+        ],
+        "arguments": [
+            {
+                "name": "save-selector",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "nosave",
+                        "type": "pure-token",
+                        "token": "NOSAVE"
+                    },
+                    {
+                        "name": "save",
+                        "type": "pure-token",
+                        "token": "SAVE"
+                    }
+                ],
+                "optional": true
+            },
+            {
+                "name": "now",
+                "type": "pure-token",
+                "token": "NOW",
+                "since": "7.0.0",
+                "optional": true
+            },
+            {
+                "name": "force",
+                "type": "pure-token",
+                "token": "FORCE",
+                "since": "7.0.0",
+                "optional": true
+            },
+            {
+                "name": "abort",
+                "type": "pure-token",
+                "token": "ABORT",
+                "since": "7.0.0",
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "description": "OK if ABORT was specified and shutdown was aborted. On successful shutdown, nothing is returned since the server quits and the connection is closed. On failure, an error is returned.",
+            "const": "OK"
+        }
+    }
+}

@@ -290,6 +290,39 @@ def parse_subcommands(raw):
     return result
 
 
+def build_fallback_key_specs(cmd_info):
+    """Build key_specs from parsed COMMAND info when richer docs are unavailable."""
+    if cmd_info["key_specs_raw"]:
+        parsed_specs = [s for s in (parse_key_spec(ks) for ks in cmd_info["key_specs_raw"] if ks) if s]
+        if parsed_specs:
+            return parsed_specs
+
+    if cmd_info["first_key_pos"] <= 0:
+        return None
+
+    command_flags = set(cmd_info.get("command_flags", []))
+    if "READONLY" in command_flags and "WRITE" not in command_flags:
+        flags = ["RO", "ACCESS"]
+    elif "WRITE" in command_flags:
+        flags = ["RW", "UPDATE"]
+    else:
+        flags = ["RW"]
+
+    return [
+        {
+            "flags": flags,
+            "begin_search": {"index": {"pos": cmd_info["first_key_pos"]}},
+            "find_keys": {
+                "range": {
+                    "lastkey": cmd_info["last_key_pos"],
+                    "step": cmd_info["key_step"],
+                    "limit": 0,
+                }
+            },
+        }
+    ]
+
+
 def build_v6_json(cmd_info, docs_data=None):
     """Build a v7-format JSON dict from v6 COMMAND INFO data.
 
@@ -328,23 +361,9 @@ def build_v6_json(cmd_info, docs_data=None):
         if pre_v7_hist:
             data["history"] = pre_v7_hist
 
-    # Build key_specs from positional key info
-    if cmd_info["first_key_pos"] > 0:
-        data["key_specs"] = [
-            {
-                "flags": ["RW"],
-                "begin_search": {"index": {"pos": cmd_info["first_key_pos"]}},
-                "find_keys": {
-                    "range": {
-                        "lastkey": cmd_info["last_key_pos"]
-                        if cmd_info["last_key_pos"] >= 0
-                        else cmd_info["last_key_pos"],
-                        "step": cmd_info["key_step"],
-                        "limit": 0,
-                    }
-                },
-            }
-        ]
+    key_specs = build_fallback_key_specs(cmd_info)
+    if key_specs:
+        data["key_specs"] = key_specs
 
     return {name: data}
 
@@ -366,25 +385,9 @@ def build_v7_json(cmd_info, docs_data):
     if docs_data.get("history"):
         data["history"] = docs_data["history"]
 
-    # Key specs from COMMAND INFO
-    if cmd_info["key_specs_raw"]:
-        parsed_specs = [s for s in (parse_key_spec(ks) for ks in cmd_info["key_specs_raw"] if ks) if s]
-        if parsed_specs:
-            data["key_specs"] = parsed_specs
-    elif cmd_info["first_key_pos"] > 0:
-        data["key_specs"] = [
-            {
-                "flags": ["RW"],
-                "begin_search": {"index": {"pos": cmd_info["first_key_pos"]}},
-                "find_keys": {
-                    "range": {
-                        "lastkey": cmd_info["last_key_pos"],
-                        "step": cmd_info["key_step"],
-                        "limit": 0,
-                    }
-                },
-            }
-        ]
+    key_specs = build_fallback_key_specs(cmd_info)
+    if key_specs:
+        data["key_specs"] = key_specs
 
     if docs_data.get("arguments"):
         data["arguments"] = docs_data["arguments"]
@@ -526,6 +529,10 @@ def process_v6(r, r7=None, v7_source_map=None):
                 pre_v7_hist = [h for h in history if not is_v7_version_str(h[0])]
                 if pre_v7_hist:
                     data["history"] = pre_v7_hist
+
+                key_specs = build_fallback_key_specs(si)
+                if key_specs:
+                    data["key_specs"] = key_specs
 
                 # Enrich with reply_schema from v7 source for pre-v7 subcommands
                 src = v7_source_map.get(cmd_key)

@@ -1,0 +1,44 @@
+{
+    "CLUSTER|MEET": {
+        "summary": "Forces a node to handshake with another node.",
+        "complexity": "O(1)",
+        "group": "cluster",
+        "since": "3.0.0",
+        "arity": -4,
+        "command_flags": [
+            "ADMIN",
+            "NO_ASYNC_LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "ip",
+                "type": "string"
+            },
+            {
+                "name": "port",
+                "type": "integer"
+            },
+            {
+                "name": "cluster-bus-port",
+                "type": "integer",
+                "since": "4.0.0",
+                "optional": true
+            }
+        ],
+        "history": [
+            [
+                "4.0.0",
+                "Added the optional `cluster_bus_port` argument."
+            ]
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

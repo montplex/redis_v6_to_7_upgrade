@@ -1,0 +1,36 @@
+{
+    "LATENCY|RESET": {
+        "summary": "Resets the latency data for one or more events.",
+        "complexity": "O(1)",
+        "group": "server",
+        "since": "2.8.13",
+        "arity": -2,
+        "command_flags": [
+            "ADMIN",
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "event",
+                "type": "string",
+                "optional": true,
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "type": "integer",
+            "description": "Number of event time series that were reset."
+        },
+        "command_tips": [
+            "REQUEST_POLICY:ALL_NODES",
+            "RESPONSE_POLICY:AGG_SUM"
+        ]
+    }
+}

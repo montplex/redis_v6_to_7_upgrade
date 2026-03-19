@@ -1,0 +1,31 @@
+{
+    "CLIENT|SETNAME": {
+        "summary": "Sets the connection name.",
+        "complexity": "O(1)",
+        "group": "connection",
+        "since": "2.6.9",
+        "arity": 3,
+        "command_flags": [
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "CONNECTION",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "connection-name",
+                "type": "string"
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        },
+        "command_tips": [
+            "REQUEST_POLICY:ALL_NODES",
+            "RESPONSE_POLICY:ALL_SUCCEEDED"
+        ]
+    }
+}

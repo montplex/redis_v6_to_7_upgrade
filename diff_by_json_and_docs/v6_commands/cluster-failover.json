@@ -1,0 +1,41 @@
+{
+    "CLUSTER|FAILOVER": {
+        "summary": "Forces a replica to perform a manual failover of its master.",
+        "complexity": "O(1)",
+        "group": "cluster",
+        "since": "3.0.0",
+        "arity": -2,
+        "command_flags": [
+            "ADMIN",
+            "NO_ASYNC_LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "options",
+                "type": "oneof",
+                "arguments": [
+                    {
+                        "name": "force",
+                        "type": "pure-token",
+                        "token": "FORCE"
+                    },
+                    {
+                        "name": "takeover",
+                        "type": "pure-token",
+                        "token": "TAKEOVER"
+                    }
+                ],
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "DBSIZE": {
+        "summary": "Returns the number of keys in the database.",
+        "complexity": "O(1)",
+        "group": "server",
+        "since": "1.0.0",
+        "arity": 1,
+        "command_flags": [
+            "FAST",
+            "READONLY"
+        ],
+        "acl_categories": [
+            "FAST",
+            "KEYSPACE",
+            "READ"
+        ],
+        "reply_schema": {
+            "type": "integer",
+            "description": "The number of keys in the currently-selected database."
+        }
+    }
+}

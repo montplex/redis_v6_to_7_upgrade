@@ -1,0 +1,30 @@
+{
+    "RANDOMKEY": {
+        "summary": "Returns a random key name from the database.",
+        "complexity": "O(1)",
+        "group": "generic",
+        "since": "1.0.0",
+        "arity": 1,
+        "command_flags": [
+            "RANDOM",
+            "READONLY"
+        ],
+        "acl_categories": [
+            "KEYSPACE",
+            "READ",
+            "SLOW"
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "when the database is empty",
+                    "type": "null"
+                },
+                {
+                    "description": "random key in db",
+                    "type": "string"
+                }
+            ]
+        }
+    }
+}

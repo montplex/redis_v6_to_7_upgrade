@@ -1,0 +1,28 @@
+{
+    "CLUSTER|FORGET": {
+        "summary": "Removes a node from the nodes table.",
+        "complexity": "O(1)",
+        "group": "cluster",
+        "since": "3.0.0",
+        "arity": 3,
+        "command_flags": [
+            "ADMIN",
+            "NO_ASYNC_LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "node-id",
+                "type": "string"
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

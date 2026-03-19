@@ -1,0 +1,41 @@
+{
+    "ZINTERCARD": {
+        "summary": "Returns the number of members of the intersect of multiple sorted sets.",
+        "complexity": "O(N*K) worst case with N being the smallest input sorted set, K being the number of input sorted sets.",
+        "group": "sorted-set",
+        "since": "7.0.0",
+        "arity": -3,
+        "command_flags": [
+            "MOVABLEKEYS",
+            "READONLY"
+        ],
+        "acl_categories": [
+            "READ",
+            "SLOW",
+            "SORTEDSET"
+        ],
+        "arguments": [
+            {
+                "name": "numkeys",
+                "type": "integer"
+            },
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0,
+                "multiple": true
+            },
+            {
+                "name": "limit",
+                "type": "integer",
+                "token": "LIMIT",
+                "optional": true
+            }
+        ],
+        "reply_schema": {
+            "description": "Number of elements in the resulting intersection.",
+            "type": "integer",
+            "minimum": 0
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "SLOWLOG": {
+        "summary": "A container for slow log commands.",
+        "complexity": "Depends on subcommand.",
+        "group": "server",
+        "since": "2.2.12",
+        "arity": -2,
+        "command_flags": [
+            "ADMIN",
+            "LOADING",
+            "RANDOM",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ]
+    }
+}

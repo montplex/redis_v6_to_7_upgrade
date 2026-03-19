@@ -1,0 +1,20 @@
+{
+    "SYNC": {
+        "summary": "An internal command used in replication.",
+        "complexity": "",
+        "group": "server",
+        "since": "1.0.0",
+        "arity": 1,
+        "command_flags": [
+            "ADMIN",
+            "NOSCRIPT",
+            "NO_ASYNC_LOADING",
+            "NO_MULTI"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ]
+    }
+}

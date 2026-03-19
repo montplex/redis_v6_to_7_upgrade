@@ -1,0 +1,56 @@
+{
+    "SUNIONSTORE": {
+        "summary": "Stores the union of multiple sets in a key.",
+        "complexity": "O(N) where N is the total number of elements in all given sets.",
+        "group": "set",
+        "since": "1.0.0",
+        "arity": -3,
+        "command_flags": [
+            "DENYOOM",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "SET",
+            "SLOW",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "destination",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 1,
+                "multiple": true
+            }
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": -1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "type": "integer",
+            "description": "Number of the elements in the resulting set.",
+            "minimum": 0
+        }
+    }
+}

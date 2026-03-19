@@ -1,0 +1,38 @@
+{
+    "XGROUP": {
+        "summary": "A container for consumer groups commands.",
+        "complexity": "Depends on subcommand.",
+        "group": "stream",
+        "since": "5.0.0",
+        "arity": -2,
+        "command_flags": [
+            "DENYOOM",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "SLOW",
+            "STREAM",
+            "WRITE"
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 2
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 2,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,61 @@
+{
+    "LPUSH": {
+        "summary": "Prepends one or more elements to a list. Creates the key if it doesn't exist.",
+        "complexity": "O(1) for each element added, so O(N) to add N elements when the command is called with multiple arguments.",
+        "group": "list",
+        "since": "1.0.0",
+        "arity": -3,
+        "command_flags": [
+            "DENYOOM",
+            "FAST",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "FAST",
+            "LIST",
+            "WRITE"
+        ],
+        "history": [
+            [
+                "2.4.0",
+                "Accepts multiple `element` arguments."
+            ]
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "element",
+                "type": "string",
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "description": "Length of the list after the push operations.",
+            "type": "integer"
+        }
+    }
+}

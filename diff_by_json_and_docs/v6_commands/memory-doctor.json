@@ -1,0 +1,17 @@
+{
+    "MEMORY|DOCTOR": {
+        "summary": "Outputs a memory problems report.",
+        "complexity": "O(1)",
+        "group": "server",
+        "since": "4.0.0",
+        "arity": 2,
+        "command_flags": [],
+        "acl_categories": [
+            "SLOW"
+        ],
+        "reply_schema": {
+            "description": "memory problems report",
+            "type": "string"
+        }
+    }
+}

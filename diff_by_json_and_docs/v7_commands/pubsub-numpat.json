@@ -1,0 +1,23 @@
+{
+    "PUBSUB|NUMPAT": {
+        "summary": "Returns a count of unique pattern subscriptions.",
+        "complexity": "O(1)",
+        "group": "pubsub",
+        "since": "2.8.0",
+        "arity": 2,
+        "command_flags": [
+            "LOADING",
+            "PUBSUB",
+            "STALE"
+        ],
+        "acl_categories": [
+            "PUBSUB",
+            "SLOW"
+        ],
+        "reply_schema": {
+            "description": "the number of patterns all the clients are subscribed to",
+            "type": "integer",
+            "minimum": 0
+        }
+    }
+}

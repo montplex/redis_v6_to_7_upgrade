@@ -1,265 +1,366 @@
-# Redis v6 vs v7 Command Diff — Design Document
+# Redis v6 to v7 Command Diff
 
 ## Goal
 
-Produce a structured, machine-readable comparison of every Redis command between
-v6.2 and v7.2, covering input parameters (arguments), output format (reply schema),
-metadata (arity, flags, ACL categories, key specs), and behavioral changes.
+Generate a machine-readable command catalog for Redis 6.2 and Redis 7.2+,
+compare them, and produce a trustworthy upgrade report covering:
 
-The approach: generate v7-format JSON descriptors for both versions from live
-servers + source code, then diff them programmatically and verify against the
-live v6 server.
+- command additions and removals
+- arity, flags, ACL categories, and key-spec changes
+- argument and behavior changes
+- reply schema differences
+
+The primary output is a verified `v6_commands/` directory, a `v7_commands/`
+directory, and a generated diff report in `redis_v6_v7_diff.md`.
+
+## Trusted Workflow
+
+This is the workflow that was verified in practice and should be treated as the
+main path for this project:
+
+1. Start a live Redis v6 server on `127.0.0.1:6399`.
+2. Start a live Redis v7 server on `127.0.0.1:7399`.
+3. Run `generate_command_jsons.py` to regenerate `v6_commands/` and `v7_commands/`.
+4. Run `compare_commands.py` to regenerate `redis_v6_v7_diff.md`.
+5. Run `verify_v6_commands.py` to validate the generated v6 JSON files against
+   the live Redis v6 server.
+
+That path was run successfully with:
+
+- Redis v6.2.6 on port `6399`
+- Redis v7.2.11 on port `7399`
+- `verify_v6_commands.py` result:
+  `PASS 1938 | FAIL 0 | SKIP 477`
 
 ## Architecture
 
-```
-                    ┌──────────────────┐
-                    │  Redis v6 server │  (port 6399)
-                    │  Redis v7 server │  (port 7399)
-                    └────────┬─────────┘
-                             │  COMMAND / COMMAND DOCS
-                             v
-               ┌─────────────────────────────┐
-               │  generate_command_jsons.py   │
-               │  (query live servers +       │
-               │   merge v7 source JSONs)     │
-               └──────┬──────────────┬────────┘
-                      │              │
-                      v              v
-              v6_commands/    v7_commands/
-              (328 files)     (370 files)
-                      │              │
-                      v              v
-               ┌─────────────────────────────┐
-               │    compare_commands.py       │──> redis_v6_v7_diff.md
-               └─────────────────────────────┘
-                      │
-              v6_commands/
-                      │
-                      v
-               ┌─────────────────────────────┐
-               │    verify_v6_commands.py     │──> test results (stdout)
-               └──────┬──────────────────────┘
-                      │
-                      v
-                Redis v6 server (live verification)
+```text
+Redis v6 live server (6399) ─┐
+                             ├─ generate_command_jsons.py ──> v6_commands/
+Redis v7 live server (7399) ─┤                             └─> v7_commands/
+                             │
+Redis v7 source JSONs   ─────┘
+
+v6_commands/ + v7_commands/
+        └─ compare_commands.py ──> redis_v6_v7_diff.md
+
+v6_commands/ + live Redis v6
+        └─ verify_v6_commands.py
 ```
 
 ## Data Sources
 
-| Source | What it provides |
-|--------|-----------------|
-| v6 `COMMAND` (live) | arity, flags, ACL categories, first/last key, step — for all 224 top-level commands |
-| v7 `COMMAND` (live) | Same as above + key_specs array + subcommand entries (element 9) |
-| v7 `COMMAND DOCS` (live) | summary, since, group, complexity, history, arguments (full tree), subcommand docs |
-| v7 source `src/commands/*.json` | reply_schema, command_tips, deprecated_since, replaced_by, doc_flags, container |
+| Source | Purpose |
+|---|---|
+| live Redis v6 `COMMAND` | authoritative v6 arity, flags, ACL categories, and key positions |
+| live Redis v7 `COMMAND` | authoritative v7 command metadata, key specs, and subcommand info |
+| live Redis v7 `COMMAND DOCS` | summaries, groups, complexity, history, and argument trees |
+| Redis v7 source `src/commands/*.json` | reply schemas and source-only fields not exposed by `COMMAND DOCS` |
+| Redis v6 source tree `~/ws/redis_v6/src` | reference for v6-only commands like `HOST:`, `POST`, and `STRALGO` |
 
-v6 has no `COMMAND DOCS` and no on-disk JSON files, so v6 JSONs are synthesized by
-combining v6's `COMMAND` output with v7's `COMMAND DOCS` (filtering out anything
-with `since >= 7.0.0`).
+Important constraint:
 
-## Files
+- Redis v6 does not have `COMMAND DOCS` and does not ship the newer
+  `src/commands/*.json` command metadata format.
+- Because of that, v6 JSON files are synthesized from live v6 `COMMAND` plus
+  v7 `COMMAND DOCS`, while filtering out anything introduced in Redis 7.
 
-### `generate_command_jsons.py` (686 lines)
+## Output Model
 
-Connects to both live Redis servers and produces one JSON file per command in
-`v6_commands/` and `v7_commands/`, using the same schema as v7's
-`src/commands/*.json`.
+Each generated command file follows the Redis v7 command JSON shape as closely
+as possible. Typical fields include:
 
-**Key design decisions:**
+- `summary`
+- `complexity`
+- `group`
+- `since`
+- `arity`
+- `command_flags`
+- `acl_categories`
+- `arguments`
+- `key_specs`
+- `history`
+- `reply_schema`
+- `deprecated_since`
+- `replaced_by`
+- `command_tips`
 
-1. **v6 subcommand derivation** — v6's `COMMAND` only returns top-level entries
-   (e.g. `CONFIG` but not `CONFIG|SET`). Subcommands are derived from v7's
-   `COMMAND DOCS` by checking `since < 7.0.0` on each subcommand entry. Their
-   arity/flags come from v7's `COMMAND` response (element 9 = subcommand array).
+For v6, some fields are synthesized rather than sourced directly:
 
-2. **v7 source enrichment** — The live `COMMAND DOCS` protocol does not expose
-   `reply_schema`, `command_tips`, `deprecated_since`, or `replaced_by`. These
-   are read from the v7 source tree (`/home/kerry/ws/redis/src/commands/*.json`)
-   and merged in.
+- `arguments` and `history` come from v7 docs, filtered to pre-7 entries only
+- `reply_schema` is copied from v7 source when the command existed before v7
+- `key_specs` are reconstructed from live positional metadata when richer specs
+  are not available
 
-3. **Subcommand key collision resolution** — On-disk source JSONs use short keys
-   (e.g. `config-set.json` has key `"SET"`, not `"CONFIG|SET"`). The loader uses
-   the `"container"` field present in every subcommand JSON to reconstruct the
-   full name: `container="CONFIG"` + key `"SET"` → `"CONFIG|SET"`.
+## Primary Scripts
 
-4. **Pre-v7 argument filtering** — When building v6 JSONs from v7 docs, arguments
-   with `since >= 7.0.0` are recursively stripped. Similarly, history entries from
-   v7 are excluded.
+### `generate_command_jsons.py`
 
-5. **v6 reply_schema** — For commands that existed before v7, the reply format
-   didn't change, so the v7 source `reply_schema` is copied to v6 JSONs as-is
-   (except for commands first introduced in v7).
+Use this first whenever command JSONs need to be refreshed.
 
-**Per-command JSON schema:**
+What it does:
 
-```json
-{
-  "COMMAND_NAME": {
-    "summary": "...",
-    "complexity": "O(...)",
-    "group": "string | hash | list | ...",
-    "since": "1.0.0",
-    "arity": -3,
-    "command_flags": ["WRITE", "DENYOOM"],
-    "acl_categories": ["STRING", "WRITE", "SLOW"],
-    "arguments": [
-      {
-        "name": "key",
-        "type": "key",
-        "key_spec_index": 0
-      },
-      {
-        "name": "value",
-        "type": "string"
-      },
-      {
-        "name": "condition",
-        "type": "oneof",
-        "optional": true,
-        "since": "2.6.12",
-        "arguments": [
-          {"name": "nx", "type": "pure-token", "token": "NX"},
-          {"name": "xx", "type": "pure-token", "token": "XX"}
-        ]
-      }
-    ],
-    "key_specs": [...],
-    "history": [["6.2.0", "Added the GET option."]],
-    "reply_schema": {"const": "OK"},
-    "deprecated_since": "6.2.0",
-    "replaced_by": "...",
-    "command_tips": [...]
-  }
-}
-```
+- connects to Redis v6 on port `6399`
+- connects to Redis v7 on port `7399`
+- reads live command metadata from both servers
+- reads Redis v7 source JSON files from `/home/kerry/ws/redis/src/commands`
+- writes one JSON file per command into `v6_commands/` and `v7_commands/`
 
-### `compare_commands.py` (517 lines)
+Key behavior:
 
-Reads `v6_commands/` and `v7_commands/`, compares every field, and writes
-`redis_v6_v7_diff.md` (3583 lines, 12 sections + summary).
+- derives v6 subcommands from v7 command docs when the subcommand `since` is
+  pre-7
+- reconstructs full subcommand names using the v7 source `container` field
+- strips v7-only arguments and history from v6 output
+- synthesizes fallback `key_specs`
+- preserves readonly semantics in fallback `key_specs` by using `RO/ACCESS`
+  for readonly commands and `RW/UPDATE` for write commands
 
-**Report sections:**
+When to use it:
 
-| # | Section | What it compares |
-|---|---------|-----------------|
-| 1 | New Commands in v7 | Commands in v7 but not v6, grouped by category |
-| 2 | Removed / Deprecated | Commands in v6 but not v7 |
-| 3 | Subcommands in v7 | All v7 subcommands, marking new ones |
-| 4 | Arity Changes | Commands where arity changed (fixed↔variable) |
-| 5 | Command Flag Changes | Added/removed flags per command |
-| 6 | ACL Category Changes | Added/removed ACL categories per command |
-| 7 | New v7 Arguments | Arguments with `since >= 7.0.0` on pre-existing commands |
-| 8 | Behavioral Changes | `history` entries from v7 on pre-existing commands |
-| 9 | Input Parameter Diffs | Deep recursive argument structure diff (added/removed/changed) |
-| 10 | Reply Schema Diffs | `reply_schema` differences between v6 and v7 |
-| 11 | Deprecated Commands | Commands with `deprecated_since` or `doc_flags` |
-| 12 | Full Argument Specs | Complete argument tree for every shared command (collapsible) |
+- after changing generation logic
+- after changing Redis server versions
+- before regenerating the diff report
+- before re-running verification
 
-**Argument diff algorithm** (`diff_arguments`):
-- Builds name→arg maps for both versions
-- Detects added, removed, and changed arguments
-- For changed arguments, compares: type, token, optional, multiple, multiple_token
-- Recurses into nested `arguments` (for oneof/block types)
-
-### `verify_v6_commands.py` (625 lines)
-
-Verifies all 328 generated v6 command JSONs against the live v6 server.
-Three-part test suite:
-
-**Part 1: Metadata verification (1630 checks, 0 failures)**
-
-For all 224 top-level commands, fetches `COMMAND` from the live v6 server and
-compares:
-- `arity` — exact match
-- `command_flags` — normalized flag names, sorted comparison
-- `acl_categories` — normalized (strip `@` prefix, uppercase), sorted comparison
-- Key positions — `first_key`, `last_key`, `key_step` from `key_specs` vs live
-
-For all 104 subcommands, verifies presence of `summary`, `arity`, `group`, `since`.
-
-**Part 2: Argument execution (232 checks, 0 failures, 251 skips)**
-
-For each command with an `arguments` spec:
-1. Auto-generates a minimal valid argument list by walking the argument tree
-   (picks first oneof option, fills required args, skips optional ones)
-2. Executes the command on the live server — expects success or a recognized
-   data/state error (WRONGTYPE, NOGROUP, etc.)
-3. Tests wrong-arity rejection — sends zero args to commands that need them
-
-Custom argument overrides for commands where the generic builder can't produce
-semantically valid values (stream IDs, geo units, lex ranges, SHA1 hashes).
-
-Skips blocking commands (BLPOP, SUBSCRIBE, XREAD), destructive commands
-(SHUTDOWN, FLUSHDB, CLUSTER), and internal commands (PSYNC, REPLCONF).
-
-**Part 3: Reply schema (76 checks, 0 failures, 226 skips)**
-
-Executes each command and checks the Python reply type against `reply_schema`:
-- Handles redis-py type coercions: `OK`→`True`, SCAN→tuple, INFO→dict,
-  GEODIST→float, LASTSAVE→datetime, SDIFF→set
-- Schema matching supports: `const`, `type`, `anyOf`, `oneOf`, nested schemas
-
-### `redis_v6_v7_diff.md` (3583 lines)
-
-The generated diff report. Key findings:
-
-| Metric | Count |
-|--------|-------|
-| v6 commands (top + sub) | 328 |
-| v7 commands (top + sub) | 370 |
-| New in v7 | 45 |
-| Removed from v6 | 3 |
-| Arity changes | 8 |
-| Flag changes | 77 |
-| ACL category changes | 19 |
-| Commands with new v7 args | 8 |
-| Behavioral changes | 31 |
-| Argument structure diffs | 8 |
-| Reply schema diffs | 0 |
-| Deprecated commands | 26 |
-
-### `v6_commands/` (328 JSON files) and `v7_commands/` (370 JSON files)
-
-One JSON file per command/subcommand. Filename convention:
-`command-name.json` for top-level, `parent-sub.json` for subcommands
-(e.g. `config-set.json` for `CONFIG|SET`).
-
-## Commands with Argument Differences (v6 vs v7)
-
-Only 8 commands have structural argument differences — all are v7 additions,
-all backward-compatible (new args are optional):
-
-| Command | Change in v7 |
-|---------|-------------|
-| BITCOUNT | Added optional `BYTE`/`BIT` unit for range |
-| BITPOS | Added optional `BYTE`/`BIT` unit for range |
-| EXPIRE | Added optional `NX`/`XX`/`GT`/`LT` condition |
-| EXPIREAT | Added optional `NX`/`XX`/`GT`/`LT` condition |
-| PEXPIRE | Added optional `NX`/`XX`/`GT`/`LT` condition |
-| PEXPIREAT | Added optional `NX`/`XX`/`GT`/`LT` condition |
-| SHUTDOWN | Added optional `NOW`/`FORCE`/`ABORT` flags |
-| XSETID | Added optional `ENTRIESADDED`/`MAXDELETEDID` params |
-
-## Bugs Found and Fixed
-
-1. **Source map key collision** — `load_v7_source_jsons()` initially loaded
-   JSON files by their internal key name. Subcommand files like `config-set.json`
-   use key `"SET"` which collided with the top-level `set.json` (also key `"SET"`).
-   Fix: use the `"container"` field in subcommand JSONs to reconstruct the full
-   command name (`CONFIG|SET`).
-
-## How to Run
+How to run:
 
 ```bash
-# Prerequisites: Redis v6 on port 6399, Redis v7 on port 7399, pip install redis
-
-# Step 1: Generate command JSONs from live servers
 python3 generate_command_jsons.py
+```
 
-# Step 2: Generate the diff report
+### `compare_commands.py`
+
+Use this after JSON generation to rebuild the human-readable upgrade report.
+
+What it does:
+
+- reads all files from `v6_commands/` and `v7_commands/`
+- compares shared commands and identifies additions/removals
+- writes `redis_v6_v7_diff.md`
+
+Report sections include:
+
+- new commands in v7
+- removed commands from v6
+- v7 subcommands
+- arity changes
+- command flag changes
+- ACL category changes
+- new v7 arguments
+- behavioral changes from history entries
+- recursive argument diffs
+- reply schema diffs
+- deprecated commands
+- full argument trees
+
+When to use it:
+
+- after any regeneration of command JSONs
+- before publishing or reviewing the upgrade report
+
+How to run:
+
+```bash
 python3 compare_commands.py
+```
 
-# Step 3: Verify v6 JSONs against live server
+### `verify_v6_commands.py`
+
+This is the authoritative verifier for the generated v6 JSON files.
+
+What it does:
+
+- validates top-level metadata against live Redis v6 `COMMAND`
+- checks that subcommands have required descriptive fields
+- generates minimal valid argument lists and executes safe commands
+- checks wrong-arity handling
+- validates reply values against `reply_schema` where safe
+
+Why it is trusted:
+
+- it compares generated output directly against a live Redis v6 server
+- it was run successfully on regenerated output with `0` failures
+
+When to use it:
+
+- after every regeneration of `v6_commands/`
+- before claiming the v6 JSON set is correct
+
+How to run:
+
+```bash
 python3 verify_v6_commands.py
 ```
+
+## Secondary / Legacy Scripts
+
+These scripts are still useful, but they are not the primary source of truth.
+Keep them for exploration, sanity checks, and compatibility experiments.
+
+### `verify_v6_against_v7_source.py`
+
+Purpose:
+
+- structural sanity check of v6 JSON files against v7 source command files
+
+Why it is not authoritative:
+
+- it assumes too much symmetry between v6 and v7
+- it reports expected version differences as failures
+- it flags legitimate v6-only commands not present in v7 source
+- it treats some missing `reply_schema` or arity differences as bugs even when
+  they are correct for Redis 6
+
+Use it when:
+
+- investigating suspicious generated output
+- auditing field coverage
+- checking that v7-only arguments/history did not leak into v6 JSON
+
+Do not use it as the final pass/fail decision for correctness.
+
+### `test_v6_on_v7.py`
+
+Purpose:
+
+- execute v6 commands against a live Redis v7 server to check backward
+  compatibility at a practical level
+
+Why it is secondary:
+
+- this is a compatibility smoke test, not a generator verifier
+- many commands are skipped because they are destructive, blocking, or need
+  special setup
+- a passing result says more about runtime compatibility than JSON correctness
+
+Use it when:
+
+- validating upgrade compatibility expectations
+- checking whether v6 command shapes are still accepted by Redis v7
+
+### `execute_v6_on_v7_full.py`
+
+Purpose:
+
+- broader compatibility probing using fuller generated argument sets on Redis v7
+
+Why it is secondary:
+
+- generated argument lists are heuristic, not authoritative
+- it is more exploratory and can produce noisy data/state errors
+- it is better for surfacing interesting incompatibilities than for proving
+  correctness
+
+Use it when:
+
+- exploring command behavior on Redis v7
+- looking for edge cases missed by minimal-argument compatibility checks
+
+### `test_generate_command_jsons.py`
+
+Purpose:
+
+- focused regression tests for the generator implementation
+
+Current coverage:
+
+- fallback `key_specs` generation for readonly vs write commands
+
+Use it when:
+
+- changing generation logic
+- fixing generator bugs
+- before regenerating the command directories
+
+How to run:
+
+```bash
+python3 -m unittest -v test_generate_command_jsons.py
+```
+
+## Known Edge Cases
+
+### v6-only commands
+
+The generated v6 set intentionally includes commands that do not exist in Redis
+v7 source metadata, including:
+
+- `HOST:`
+- `POST`
+- `STRALGO`
+
+These are real Redis 6 commands and should remain in `v6_commands/`. They show
+up in the diff report as removed commands.
+
+### Skipped live checks
+
+`verify_v6_commands.py` skips commands that are:
+
+- blocking
+- destructive
+- replication/internal
+- pubsub-mode commands
+- commands requiring special server setup
+
+That is expected. Those commands still receive metadata checks where possible.
+
+## Verified Usage
+
+Typical end-to-end usage:
+
+```bash
+# 1. Start Redis v6 and v7 servers on 6399 and 7399
+
+# 2. Optional: verify generator regression tests
+python3 -m unittest -v test_generate_command_jsons.py
+
+# 3. Regenerate JSON command catalogs
+python3 generate_command_jsons.py
+
+# 4. Rebuild the diff report
+python3 compare_commands.py
+
+# 5. Verify v6 JSONs against live Redis v6
+python3 verify_v6_commands.py
+
+# 6. Optional exploratory checks
+python3 verify_v6_against_v7_source.py
+python3 test_v6_on_v7.py
+python3 execute_v6_on_v7_full.py
+```
+
+## Current Expected Totals
+
+From the current generated output:
+
+| Metric | Count |
+|---|---:|
+| v6 commands | 328 |
+| v7 commands | 370 |
+| v6 top-level commands | 224 |
+| v6 subcommands | 104 |
+| v7 top-level commands | 241 |
+| v7 subcommands | 129 |
+| new in v7 | 45 |
+| removed from v6 | 3 |
+| arity changes | 8 |
+| flag changes | 77 |
+| ACL category changes | 19 |
+| argument structure diffs | 8 |
+| reply schema diffs | 0 |
+| deprecated commands | 26 |
+
+## Summary
+
+If you need a reliable answer to "are the generated Redis v6 JSON files correct
+for a live Redis 6 server?", the correct workflow is:
+
+1. `python3 generate_command_jsons.py`
+2. `python3 verify_v6_commands.py`
+
+If you need the human-readable upgrade report, add:
+
+3. `python3 compare_commands.py`
+
+Everything else in this directory is supplementary.

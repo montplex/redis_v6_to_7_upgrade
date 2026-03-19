@@ -1,0 +1,16 @@
+{
+    "MEMORY|PURGE": {
+        "summary": "Asks the allocator to release memory.",
+        "complexity": "Depends on how much memory is allocated, could be slow",
+        "group": "server",
+        "since": "4.0.0",
+        "arity": 2,
+        "command_flags": [],
+        "acl_categories": [
+            "SLOW"
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

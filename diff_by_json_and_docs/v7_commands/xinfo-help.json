@@ -1,0 +1,24 @@
+{
+    "XINFO|HELP": {
+        "summary": "Returns helpful text about the different subcommands.",
+        "complexity": "O(1)",
+        "group": "stream",
+        "since": "5.0.0",
+        "arity": 2,
+        "command_flags": [
+            "LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "SLOW",
+            "STREAM"
+        ],
+        "reply_schema": {
+            "type": "array",
+            "description": "Helpful text about subcommands.",
+            "items": {
+                "type": "string"
+            }
+        }
+    }
+}

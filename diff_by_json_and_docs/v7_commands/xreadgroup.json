@@ -1,0 +1,115 @@
+{
+    "XREADGROUP": {
+        "summary": "Returns new or historical messages from a stream for a consumer in a group. Blocks until a message is available otherwise.",
+        "complexity": "For each stream mentioned: O(M) with M being the number of elements returned. If M is constant (e.g. always asking for the first 10 elements with COUNT), you can consider it O(1). On the other side when XREADGROUP blocks, XADD will pay the O(N) time in order to serve the N clients blocked on the stream getting new data.",
+        "group": "stream",
+        "since": "5.0.0",
+        "arity": -7,
+        "command_flags": [
+            "BLOCKING",
+            "MOVABLEKEYS",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "BLOCKING",
+            "SLOW",
+            "STREAM",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "group-block",
+                "type": "block",
+                "token": "GROUP",
+                "arguments": [
+                    {
+                        "name": "group",
+                        "type": "string"
+                    },
+                    {
+                        "name": "consumer",
+                        "type": "string"
+                    }
+                ]
+            },
+            {
+                "name": "count",
+                "type": "integer",
+                "token": "COUNT",
+                "optional": true
+            },
+            {
+                "name": "milliseconds",
+                "type": "integer",
+                "token": "BLOCK",
+                "optional": true
+            },
+            {
+                "name": "noack",
+                "type": "pure-token",
+                "token": "NOACK",
+                "optional": true
+            },
+            {
+                "name": "streams",
+                "type": "block",
+                "token": "STREAMS",
+                "arguments": [
+                    {
+                        "name": "key",
+                        "type": "key",
+                        "key_spec_index": 0,
+                        "multiple": true
+                    },
+                    {
+                        "name": "id",
+                        "type": "string",
+                        "multiple": true
+                    }
+                ]
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "If BLOCK option is specified and the timeout expired",
+                    "type": "null"
+                },
+                {
+                    "description": "A map of key-value elements when each element composed of key name and the entries reported for that key",
+                    "type": "object",
+                    "additionalProperties": {
+                        "description": "The entries reported for that key",
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "minItems": 2,
+                            "maxItems": 2,
+                            "items": [
+                                {
+                                    "description": "Stream id",
+                                    "type": "string",
+                                    "pattern": "[0-9]+-[0-9]+"
+                                },
+                                {
+                                    "oneOf": [
+                                        {
+                                            "description": "Array of field-value pairs",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        {
+                                            "type": "null"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

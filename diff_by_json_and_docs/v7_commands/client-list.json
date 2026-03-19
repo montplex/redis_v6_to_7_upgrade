@@ -1,0 +1,93 @@
+{
+    "CLIENT|LIST": {
+        "summary": "Lists open connections.",
+        "complexity": "O(N) where N is the number of client connections",
+        "group": "connection",
+        "since": "2.4.0",
+        "arity": -2,
+        "command_flags": [
+            "ADMIN",
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "CONNECTION",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "history": [
+            [
+                "2.8.12",
+                "Added unique client `id` field."
+            ],
+            [
+                "5.0.0",
+                "Added optional `TYPE` filter."
+            ],
+            [
+                "6.0.0",
+                "Added `user` field."
+            ],
+            [
+                "6.2.0",
+                "Added `argv-mem`, `tot-mem`, `laddr` and `redir` fields and the optional `ID` filter."
+            ],
+            [
+                "7.0.0",
+                "Added `resp`, `multi-mem`, `rbs` and `rbp` fields."
+            ],
+            [
+                "7.0.3",
+                "Added `ssub` field."
+            ]
+        ],
+        "arguments": [
+            {
+                "name": "client-type",
+                "type": "oneof",
+                "token": "TYPE",
+                "since": "5.0.0",
+                "arguments": [
+                    {
+                        "name": "normal",
+                        "type": "pure-token",
+                        "token": "NORMAL"
+                    },
+                    {
+                        "name": "master",
+                        "type": "pure-token",
+                        "token": "MASTER"
+                    },
+                    {
+                        "name": "replica",
+                        "type": "pure-token",
+                        "token": "REPLICA"
+                    },
+                    {
+                        "name": "pubsub",
+                        "type": "pure-token",
+                        "token": "PUBSUB"
+                    }
+                ],
+                "optional": true
+            },
+            {
+                "name": "client-id",
+                "type": "integer",
+                "token": "ID",
+                "since": "6.2.0",
+                "optional": true,
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "type": "string",
+            "description": "Information and statistics about client connections"
+        },
+        "command_tips": [
+            "NONDETERMINISTIC_OUTPUT"
+        ]
+    }
+}

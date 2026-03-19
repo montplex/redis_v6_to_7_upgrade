@@ -1,0 +1,23 @@
+{
+    "DEBUG": {
+        "summary": "A container for debugging commands.",
+        "complexity": "Depends on subcommand.",
+        "group": "server",
+        "since": "1.0.0",
+        "arity": -2,
+        "command_flags": [
+            "ADMIN",
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "doc_flags": [
+            "SYSCMD"
+        ]
+    }
+}

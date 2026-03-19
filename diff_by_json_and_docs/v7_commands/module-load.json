@@ -1,0 +1,34 @@
+{
+    "MODULE|LOAD": {
+        "summary": "Loads a module.",
+        "complexity": "O(1)",
+        "group": "server",
+        "since": "4.0.0",
+        "arity": -3,
+        "command_flags": [
+            "ADMIN",
+            "NOSCRIPT",
+            "NO_ASYNC_LOADING"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "arguments": [
+            {
+                "name": "path",
+                "type": "string"
+            },
+            {
+                "name": "arg",
+                "type": "string",
+                "optional": true,
+                "multiple": true
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

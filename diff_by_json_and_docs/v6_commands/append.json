@@ -1,0 +1,54 @@
+{
+    "APPEND": {
+        "summary": "Appends a string to the value of a key. Creates the key if it doesn't exist.",
+        "complexity": "O(1). The amortized time complexity is O(1) assuming the appended value is small and the already present value is of any size, since the dynamic string library used by Redis will double the free space available on every reallocation.",
+        "group": "string",
+        "since": "2.0.0",
+        "arity": 3,
+        "command_flags": [
+            "DENYOOM",
+            "FAST",
+            "WRITE"
+        ],
+        "acl_categories": [
+            "FAST",
+            "STRING",
+            "WRITE"
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0
+            },
+            {
+                "name": "value",
+                "type": "string"
+            }
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW",
+                    "UPDATE"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": 1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "type": "integer",
+            "description": "The length of the string after the append operation."
+        }
+    }
+}

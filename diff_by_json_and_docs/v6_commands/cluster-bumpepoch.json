@@ -1,0 +1,33 @@
+{
+    "CLUSTER|BUMPEPOCH": {
+        "summary": "Advances the cluster config epoch.",
+        "complexity": "O(1)",
+        "group": "cluster",
+        "since": "3.0.0",
+        "arity": 2,
+        "command_flags": [
+            "ADMIN",
+            "NO_ASYNC_LOADING",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "if the epoch was incremented",
+                    "type": "string",
+                    "pattern": "^BUMPED [0-9]*$"
+                },
+                {
+                    "description": "if the node already has the greatest config epoch in the cluster",
+                    "type": "string",
+                    "pattern": "^STILL [0-9]*$"
+                }
+            ]
+        }
+    }
+}

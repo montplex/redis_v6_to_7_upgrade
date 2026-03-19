@@ -1,0 +1,88 @@
+{
+    "XREAD": {
+        "summary": "Returns messages from multiple streams with IDs greater than the ones requested. Blocks until a message is available otherwise.",
+        "complexity": "",
+        "group": "stream",
+        "since": "5.0.0",
+        "arity": -4,
+        "command_flags": [
+            "MOVABLEKEYS",
+            "READONLY"
+        ],
+        "acl_categories": [
+            "BLOCKING",
+            "READ",
+            "SLOW",
+            "STREAM"
+        ],
+        "arguments": [
+            {
+                "name": "count",
+                "type": "integer",
+                "token": "COUNT",
+                "optional": true
+            },
+            {
+                "name": "milliseconds",
+                "type": "integer",
+                "token": "BLOCK",
+                "optional": true
+            },
+            {
+                "name": "streams",
+                "type": "block",
+                "token": "STREAMS",
+                "arguments": [
+                    {
+                        "name": "key",
+                        "type": "key",
+                        "key_spec_index": 0,
+                        "multiple": true
+                    },
+                    {
+                        "name": "id",
+                        "type": "string",
+                        "multiple": true
+                    }
+                ]
+            }
+        ],
+        "reply_schema": {
+            "oneOf": [
+                {
+                    "description": "A map of key-value elements when each element composed of key name and the entries reported for that key",
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "description": "The entries reported for that key",
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "minItems": 2,
+                                "maxItems": 2,
+                                "items": [
+                                    {
+                                        "description": "entry id",
+                                        "type": "string",
+                                        "pattern": "[0-9]+-[0-9]+"
+                                    },
+                                    {
+                                        "description": "array of field-value pairs",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "description": "If BLOCK option is given, and a timeout occurs, or there is no stream we can serve",
+                    "type": "null"
+                }
+            ]
+        }
+    }
+}

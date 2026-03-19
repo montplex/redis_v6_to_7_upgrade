@@ -1,0 +1,49 @@
+{
+    "WATCH": {
+        "summary": "Monitors changes to keys to determine the execution of a transaction.",
+        "complexity": "O(1) for every key.",
+        "group": "transactions",
+        "since": "2.2.0",
+        "arity": -2,
+        "command_flags": [
+            "FAST",
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "FAST",
+            "TRANSACTION"
+        ],
+        "arguments": [
+            {
+                "name": "key",
+                "type": "key",
+                "key_spec_index": 0,
+                "multiple": true
+            }
+        ],
+        "key_specs": [
+            {
+                "flags": [
+                    "RW"
+                ],
+                "begin_search": {
+                    "index": {
+                        "pos": 1
+                    }
+                },
+                "find_keys": {
+                    "range": {
+                        "lastkey": -1,
+                        "step": 1,
+                        "limit": 0
+                    }
+                }
+            }
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}

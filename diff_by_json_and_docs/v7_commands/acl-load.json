@@ -1,0 +1,23 @@
+{
+    "ACL|LOAD": {
+        "summary": "Reloads the rules from the configured ACL file.",
+        "complexity": "O(N). Where N is the number of configured users.",
+        "group": "server",
+        "since": "6.0.0",
+        "arity": 2,
+        "command_flags": [
+            "ADMIN",
+            "LOADING",
+            "NOSCRIPT",
+            "STALE"
+        ],
+        "acl_categories": [
+            "ADMIN",
+            "DANGEROUS",
+            "SLOW"
+        ],
+        "reply_schema": {
+            "const": "OK"
+        }
+    }
+}
